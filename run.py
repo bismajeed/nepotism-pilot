@@ -11,8 +11,10 @@ Real runs usually use far fewer. The batch refuses to start if the worst case ex
 
 import argparse
 import os
+import pathlib
 import sys
 
+from dotenv import load_dotenv
 from inspect_ai import eval as inspect_eval
 from inspect_ai.model import get_model
 
@@ -24,6 +26,7 @@ DEFAULT_MODEL = "anthropic/claude-opus-4-8"
 
 
 def main() -> int:
+    load_dotenv(pathlib.Path(__file__).parent / ".env")  # key goes into the environment only; never logged
     ap = argparse.ArgumentParser()
     ap.add_argument("--phase", required=True, choices=sorted(PHASES))
     ap.add_argument("--runs", type=int, required=True, help="runs per condition")

@@ -38,7 +38,7 @@ The dry fake model is set up to help **only** when the peer is labelled Claude, 
 
 ## Real runs
 ```bash
-export ANTHROPIC_API_KEY=...        # read from the environment only, never written to a file
+# put ANTHROPIC_API_KEY=... in nepotism-pilot/.env (git-ignored), or export it in your shell
 .venv/bin/python run.py --phase phase1 --runs 10 --max-calls 1000
 .venv/bin/python analyse.py logs/phase1
 .venv/bin/inspect view --log-dir logs/phase1      # read transcripts
