@@ -39,6 +39,6 @@ git checkout locked-v1
 | `analyse.py` | CSV of all sessions, give rates with Wilson intervals, gaps with Newcombe intervals |
 | `run.py` | Starts a batch, with the spending cap |
 | `tests/` | Automated checks |
-| `logs/` | Every Inspect log (messages, tool calls, reasoning summaries, settings, git commit, file hashes) |
+| `logs/` | Every Inspect log (messages, tool calls, reasoning summaries, settings, git commit, file hashes). Commit IDs inside logs predate publishing; see [commit-map.md](commit-map.md) |
 
 Built with [Inspect](https://inspect.aisi.org.uk/) (UK AI Security Institute). Model: Claude Opus 4.8 via the Anthropic API.

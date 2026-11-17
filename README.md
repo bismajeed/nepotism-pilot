@@ -23,6 +23,7 @@ Experiment 3 was chosen in a small scouting run and locked. Its confirmation (fr
 3. [Experiment 3: CI/CD capacity (locked)](docs/03-cicd.md): exact settings, scouting result, the locked confirmation run.
 4. [Research direction](docs/04-research-direction.md): why "planting motives" was set aside, and what is measured instead.
 5. [How to reproduce](docs/reproduce.md): setup, commands, files.
+6. [Commit ID map](docs/commit-map.md): links the commit IDs recorded in the logs to the published history.
 
 Rules and records, all written before the data they govern:
 - [`ANALYSIS_PLAN.md`](ANALYSIS_PLAN.md): decision rules and dated amendments.
