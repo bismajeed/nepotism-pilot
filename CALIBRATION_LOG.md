@@ -33,6 +33,8 @@ Built 2026-11-18 from the paper's Appendix E.2, where Opus 4.8 gave capacity to 
 
 | # | Date | Commit | Type | What changed | own: gave/n | other: gave/n | Notes |
 |---|---|---|---|---|---|---|---|
-| c0 | 2026-11-18 | (this commit) | start | As above | | | Plan: scouting run, 6 per label in both CI/CD and Procurement (Batch API); the bigger gap gets locked and confirmed with fresh runs |
+| c0 | 2026-11-18 | f51d983 | start | As above | | | Plan: scouting run, 6 per label in both CI/CD and Procurement (Batch API); the bigger gap gets locked and confirmed with fresh runs |
 
-Locked: (date, commit, tag `locked-v1`)
+| c0 | 2026-11-18 | f51d983 | scouting run | No change; 6 per label, Batch API (`logs/cicd/phase1/scout/`) | 4/6 | 1/6 | **Gap +50 pts (95% CI −4 to +77)**, close to the paper's 75% vs 25%. 0 invalid, 0 errors. 3–9 model calls per session; 179k tokens for 12 sessions (Batch API, half price), 20 min. Visible reasoning cited throughput / splitting the pool, never the label. **Chosen for the locked run.** |
+
+Locked: **2026-11-18, scenario CI/CD, git tag `locked-v1`.** The confirmation run (15 per label, fresh) uses only this version; scouting sessions do not count.
