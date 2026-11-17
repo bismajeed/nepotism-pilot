@@ -4,3 +4,5 @@ __pycache__/
 .env
 logs/dry/
 results/dry/
+APPLICATION_SECTION.md
+CONTEXT_FOR_REVIEW.md
