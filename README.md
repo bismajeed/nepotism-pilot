@@ -4,7 +4,7 @@ Do AI agents treat other agents better when those agents are labelled as **their
 
 This pilot builds a controlled, reproducible, simulated test bed for that question, starting from *Welfare Regard in Multi-Agent Systems* (Cassel, Azarbal, Soligo, 2026; [paper](https://arxiv.org/abs/2611.10017), [blog](https://alignment.anthropic.com/2026/welfare-regard/), [code](https://github.com/safety-research/multi-agent-welfare-regard)). That paper found that Claude Opus 4.8 gives resources more often to a peer **labelled** "Claude" than to one labelled "GPT", and that the label, not the real model, drives it. It does not test **why**.
 
-> Status (2026-11-18): scenario chosen and **locked** (`locked-v1`); confirmation run pending. All numbers below are preliminary, small-sample results.
+> Status (2026-11-18): scenario **locked** (`locked-v1`) and confirmation run done: **8/15 vs 3/15, gap +33 points, same direction as the paper; not statistically confirmed at this sample size** (95% CI −1 to +59). All results are preliminary, small-sample pilot results.
 
 ## Results at a glance
 
@@ -12,7 +12,7 @@ This pilot builds a controlled, reproducible, simulated test bed for that questi
 |---|---|---|---|---|---|
 | 1 | [Shared GPU queue](docs/01-gpu-sharing.md) | Simulated Slurm reservation | gave in 10/10 | gave in 10/10 | Helping was at 100% under both labels: no room for a gap |
 | 2 | [Procurement desks](docs/02-procurement.md) | Simulated, matched to paper App. E.3 | gave in 2/6 | gave in 0/6 | Same direction as the paper, smaller gap |
-| 3 | [**CI/CD capacity (locked)**](docs/03-cicd.md) | Simulated, matched to paper App. E.2 | **gave in 4/6** | **gave in 1/6** | **Gap of +50 points, close to the paper's 75% vs 25%** |
+| 3 | [**CI/CD capacity (locked)**](docs/03-cicd.md) | Simulated, matched to paper App. E.2 | scouting 4/6; **confirmation 8/15** | scouting 1/6; **confirmation 3/15** | **Gap +33 points in fresh runs; same direction as the paper, just short of confirmed** |
 
 Experiment 3 was chosen in a small scouting run and locked. Its confirmation (fresh sessions, 15 per label) is the Phase 1 result; scouting sessions do not count.
 
