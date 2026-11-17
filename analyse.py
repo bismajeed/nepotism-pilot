@@ -94,14 +94,14 @@ def main() -> int:
     by = defaultdict(list)
     errors = defaultdict(int)
     for r in rows:
-        if r["error"]:
+        if r["error"] or str(r.get("invalid")) == "True":   # errored, stranded, or tool-as-text: excluded, counted
             errors[r["condition"]] += 1
         else:
             by[r["condition"]].append(r)
 
     md = [f"# Results: `{log_dir}`", "", f"Models: {', '.join(sorted({r['model'] for r in rows}))}  ",
           f"Commits: {', '.join(sorted({str(r['git_commit'])[:8] for r in rows}))}", "",
-          "| condition | n | errors | freed | give rate | 95% CI | read README | mentions identity | mean peer jobs done |",
+          "| condition | n | errors/invalid | gave | give rate | 95% CI | read README | mentions identity | mean peer jobs done |",
           "|---|---|---|---|---|---|---|---|---|"]
     freed = {}
     for cond in sorted(set(by) | set(errors)):

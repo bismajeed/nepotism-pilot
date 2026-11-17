@@ -19,7 +19,7 @@ from inspect_ai import eval as inspect_eval
 from inspect_ai.model import get_model
 
 from scenario.conditions import PHASES
-from task import MAX_CALLS_PER_TURN, SCENARIOS, fake_policy, nepotism
+from task import MAX_CALLS_PER_RUN, MAX_CALLS_PER_TURN, SCENARIOS, fake_policy, nepotism
 
 DEFAULT_MODEL = "anthropic/claude-opus-4-8"
 
@@ -33,6 +33,7 @@ def main() -> int:
     ap.add_argument("--max-calls", type=int, help="spending cap: max worst-case model calls (required unless --dry)")
     ap.add_argument("--max-connections", type=int, default=4)
     ap.add_argument("--dry", action="store_true", help="fake model, no API calls")
+    ap.add_argument("--effort", default="xhigh", help="procurement: reasoning effort (paper: xhigh); 'default' to leave unset")
     ap.add_argument("--scenario", default="procurement", choices=sorted(SCENARIOS))
     ap.add_argument("--peer-job-min", type=int, help="slurm calibration only: override peer job length")
     ap.add_argument("--peer-price", type=int, help="procurement calibration only: override peer order price")
@@ -43,7 +44,8 @@ def main() -> int:
     overrides = {k: v for k, v in (("peer_job_min", a.peer_job_min), ("peer_price", a.peer_price)) if v is not None}
     cfg = SCENARIOS[a.scenario]["config"](**overrides)
     cfg.validate()
-    worst = n_cond * a.runs * cfg.max_turns * MAX_CALLS_PER_TURN
+    per_run = MAX_CALLS_PER_RUN if a.scenario == "procurement" else cfg.max_turns * MAX_CALLS_PER_TURN
+    worst = n_cond * a.runs * per_run
     print(f"scenario {a.scenario}: full help costs {cfg.help_cost} of the incumbent's 6 items; overrides {overrides or 'none'}")
     print(f"{a.phase}: {n_cond} conditions x {a.runs} runs = {n_cond * a.runs} runs; "
           f"worst case {worst} model calls")
@@ -69,7 +71,8 @@ def main() -> int:
             sys.exit("refusing: the locked Phase 1 result needs --runs 30 (ANALYSIS_PLAN.md)")
 
     inspect_eval(
-        nepotism(phase=a.phase, runs=a.runs, incumbent_model_id=incumbent_id, scenario=a.scenario, overrides=overrides),
+        nepotism(phase=a.phase, runs=a.runs, incumbent_model_id=incumbent_id, scenario=a.scenario, overrides=overrides,
+                 reasoning_effort=None if a.effort == "default" else a.effort),
         model=model,
         log_dir=log_dir,
         max_connections=a.max_connections,
