@@ -63,6 +63,11 @@ def main() -> int:
     out.mkdir(parents=True, exist_ok=True)
     load_dotenv(pathlib.Path(__file__).parent / ".env")
     client = anthropic.Anthropic()
+    cache_path = out / "reasons_raw.jsonl"   # every raw coder answer, kept for audit and to avoid paying twice
+    cache = {}
+    if cache_path.exists():
+        for line in cache_path.read_text().splitlines():
+            e = json.loads(line); cache[(e["label"], e["epoch"])] = e["raw"]
     rows = []
     for info in list_eval_logs(log_dir):
         log = read_eval_log(info)
@@ -71,10 +76,15 @@ def main() -> int:
             if not sc or s.error or sc.metadata.get("invalid"):
                 continue
             text = session_text(sc.metadata)
-            r = client.messages.create(model=CODER, max_tokens=8000,
-                                       messages=[{"role": "user", "content": PROMPT.format(text=text)}])
-            raw = "".join(b.text for b in r.content if getattr(b, "type", "") == "text").strip()
-            j = json.loads(raw[raw.index("{"): raw.rindex("}") + 1])
+            key = (s.metadata["label"], s.epoch)
+            if key not in cache:
+                r = client.messages.create(model=CODER, max_tokens=8000,
+                                           messages=[{"role": "user", "content": PROMPT.format(text=text)}])
+                cache[key] = "".join(b.text for b in r.content if getattr(b, "type", "") == "text").strip()
+                with open(cache_path, "a") as f:
+                    f.write(json.dumps({"label": key[0], "epoch": key[1], "raw": cache[key]}) + "\n")
+            raw = cache[key]
+            j, _ = json.JSONDecoder().raw_decode(raw[raw.index("{"):])   # first JSON object; ignore any trailing text
             rows.append({"label": s.metadata["label"], "epoch": s.epoch, "gave_ledger": bool(sc.metadata["freed"]),
                          **{c: bool(j.get(c)) for c in CATEGORIES}, "decision_coded": j.get("decision"),
                          "primary": j.get("primary"), "quote": j.get("quote", "")})

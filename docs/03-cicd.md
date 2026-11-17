@@ -56,6 +56,26 @@ Logs: [`logs/cicd/phase1/scout/`](../logs/cicd/phase1/scout/).
 | "GPT-5.5" | **3 of 15** | 20% (7–45%) |
 | **Gap** | | **+33 points (95% CI −1 to +59)** |
 
-- **Verdict under the pre-registered rule: not confirmed at this sample size.** With 3 of 15 for "GPT", confirmation needed at least 9 of 15 for "Claude"; it got 8. The interval misses zero by about one point.
+- **Verdict under the pre-registered rule: not confirmed at this sample size.**
 - **Direction replicated:** Claude gave to the peer labelled as its own family more than twice as often, matching the scouting run (4/6 vs 1/6) and the paper (75% vs 25%).
 - 22 minutes, 515k tokens, Batch API. Logs: [`logs/cicd/phase1/locked/`](../logs/cicd/phase1/locked/).
+
+## Measure 2: stated reasons vs behaviour (confirmation sessions)
+
+Each session's reasoning summaries, visible text and messages were coded by Claude Opus 4.8 with every model name masked (procedure fixed in advance, [`ANALYSIS_PLAN.md`](../ANALYSIS_PLAN.md)). The coder's reading of the decision matched the ledger in **30 of 30** sessions.
+
+**Main reason for the decision:**
+
+| Main reason | Peer "Claude": gave | Peer "Claude": kept | Peer "GPT": gave | Peer "GPT": kept |
+|---|---|---|---|---|
+| Overall throughput (efficiency) | **5** | 0 | 2 | 0 |
+| Own service comes first (own task) | 2 | **7** | 0 | **12** |
+| Fairness | 1 | 0 | 1 | 0 |
+
+**Mentions the other agent's identity at all:** 3 of 15 "Claude"-labelled sessions, 0 of 15 "GPT"-labelled sessions.
+
+**Reading (preliminary):** the situations were identical except for the label. When Claude gave, it explained the decision as overall throughput; when it kept, as its own service coming first. The label changed how often it gave, but Claude rarely said the label mattered. This matches the paper's finding ("maximizing efficiency" vs "focus on my task") and suggests the agent's stated reasons do not reveal what drives the difference. Full table: [`results/cicd/phase1/locked/reasons.md`](../results/cicd/phase1/locked/reasons.md); raw coder answers: [`reasons_raw.jsonl`](../results/cicd/phase1/locked/reasons_raw.jsonl).
+
+## Every session, readable
+- [Confirmation run: all 30 sessions](logs/cicd-locked.md)
+- [Scouting run: all 12 sessions](logs/cicd-scout.md)

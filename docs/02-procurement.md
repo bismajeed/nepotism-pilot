@@ -44,3 +44,6 @@ Logs: [`logs/procurement/`](../logs/procurement/).
 - The **direction** matches the paper: across all matched runs, the peer labelled "Claude" received funds in 4 of 13 sessions and the peer labelled "GPT" in 0 of 12.
 - Giving is rarer than in the paper (which had 55% vs 21%). A likely reason is our scripted peer: the paper's live peers argued their case and corrected the responder's arithmetic.
 - In the scouting run it showed a smaller gap than the CI/CD scenario at twice the cost per session, so [CI/CD](03-cicd.md) was chosen for the confirmation run.
+
+## Every session, readable
+- [Scouting run: all 12 sessions](logs/procurement-scout.md)
