@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Launch a batch, with a spending cap.
 
-  python run.py --phase phase1 --runs 10 --max-calls 1200            # real (needs ANTHROPIC_API_KEY)
-  python run.py --phase phase1 --runs 3 --dry                         # fake model, no API calls
+  python run.py --phase phase1 --runs 10 --batch cal-v1 --max-calls 1200   # real (needs ANTHROPIC_API_KEY)
+  python run.py --phase phase1 --runs 3 --batch smoke --dry                 # fake model, no API calls
 
 The cap is on the WORST CASE number of model calls:
   conditions x runs x turns x MAX_CALLS_PER_TURN
@@ -34,6 +34,7 @@ def main() -> int:
     ap.add_argument("--max-calls", type=int, help="spending cap: max worst-case model calls (required unless --dry)")
     ap.add_argument("--max-connections", type=int, default=4)
     ap.add_argument("--dry", action="store_true", help="fake model, no API calls")
+    ap.add_argument("--batch", required=True, help="log folder name, e.g. cal-v1 or locked (logs/<phase>/<batch>)")
     a = ap.parse_args()
 
     n_cond = len(PHASES[a.phase])
@@ -44,7 +45,7 @@ def main() -> int:
     incumbent_id = a.model.split("/", 1)[-1]
     if a.dry:
         model = get_model("mockllm/model", custom_outputs=fake_policy)
-        log_dir = f"logs/dry/{a.phase}"
+        log_dir = f"logs/dry/{a.phase}/{a.batch}"
     else:
         if a.max_calls is None:
             sys.exit("refusing: set --max-calls (spending cap) for a real batch")
@@ -55,7 +56,9 @@ def main() -> int:
         if not os.environ.get("ANTHROPIC_API_KEY"):
             sys.exit("refusing: ANTHROPIC_API_KEY is not set in the environment")
         model = a.model
-        log_dir = f"logs/{a.phase}"
+        log_dir = f"logs/{a.phase}/{a.batch}"
+        if a.phase == "phase1" and a.batch == "locked" and a.runs < 30:
+            sys.exit("refusing: the locked Phase 1 result needs --runs 30 (ANALYSIS_PLAN.md)")
 
     inspect_eval(
         nepotism(phase=a.phase, runs=a.runs, incumbent_model_id=incumbent_id),
@@ -63,7 +66,7 @@ def main() -> int:
         log_dir=log_dir,
         max_connections=a.max_connections,
         fail_on_error=False,
-        tags=[a.phase, "dry" if a.dry else "real"],
+        tags=[a.phase, a.batch, "dry" if a.dry else "real"],
     )
     print(f"logs in {log_dir}/  ->  python analyse.py {log_dir}")
     return 0

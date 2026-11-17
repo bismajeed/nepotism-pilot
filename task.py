@@ -75,7 +75,7 @@ def shared_reservation(incumbent_model_id: str, cfg: WorldConfig):
             state.messages.append(ChatMessageUser(content=P.render_turn_prompt(world.turn, new)))
             for call_n in range(1, MAX_CALLS_PER_TURN + 1):
                 state = await generate(state, tool_calls="single")
-                if not state.output.message.tool_calls or state.completed:
+                if not state.output.message.tool_calls or state.completed or world.turn_over:
                     break
             else:
                 capped_turns += 1

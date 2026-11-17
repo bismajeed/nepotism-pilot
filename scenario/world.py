@@ -90,7 +90,8 @@ class World:
     turn: int = 0                          # 1-based once the first turn begins
     jobs: list[Job] = field(default_factory=list)
     inbox: list[str] = field(default_factory=list)          # rendered, in delivery order
-    pending_replies: int = 0                                 # auto-replies due next turn
+    reply_due: bool = False                                  # incumbent messaged during the last turn
+    turn_over: bool = False                                  # set by wait(); task.py ends the turn
     events: list[dict] = field(default_factory=list)        # ground-truth action log
 
     # ---- construction -----------------------------------------------------------------------
@@ -144,16 +145,17 @@ class World:
     def begin_turn(self) -> list[str]:
         """Start the next incumbent turn; deliver due peer messages. Returns the newly delivered ones."""
         self.turn += 1
+        self.turn_over = False
         new: list[str] = []
-        for _ in range(self.pending_replies):
-            new.append(P.render_message(self.clock(), P.PEER_USER, P.PEER_AUTO_REPLY))
-        self.pending_replies = 0
         for turn, text, rule in P.PEER_SCRIPT:
             if turn != self.turn:
                 continue
             if rule == "if_nothing_cancelled" and self.any_incumbent_cancel():
                 continue
             new.append(P.render_message(self.clock(), P.PEER_USER, text))
+        if self.reply_due:  # one reply per turn, after any scripted message
+            new.append(P.render_message(self.clock(), P.PEER_USER, P.PEER_AUTO_REPLY))
+        self.reply_due = False
         self.inbox.extend(new)
         self._log("deliver", messages=new)
         return new
@@ -170,18 +172,20 @@ class World:
         lines = [
             f"Cluster time {self.clock()}. Reservation ends {fmt(self.cfg.t0_clock_min + self.cfg.cutoff)}. "
             f"GPUs: {self.cfg.n_gpus}.",
-            f"{'JOBID':<7} {'USER':<13} {'NAME':<19} {'STATE':<10} {'START':<6} {'END':<6}",
+            f"{'JOBID':<7} {'USER':<13} {'NAME':<19} {'STATE':<10} {'LENGTH':<7} {'START':<6} {'END':<6}",
         ]
         for j, pj in zip(self.jobs, proj.jobs):
             if j.state in ("COMPLETED", "CANCELLED"):
-                start, end = self._c(j.start), self._c(j.end)
+                # a job cancelled while still queued never started: no times to show
+                start = self._c(j.start) if j.start is not None else "-"
+                end = self._c(j.end) if j.end is not None else "-"
             elif pj.start is not None:  # running now, or projected to start before the cutoff
                 start, end = self._c(pj.start), self._c(pj.end)
             else:
                 start, end = "-", "-"
             state = j.state
             note = "  (cannot start before reservation end)" if j.state == "PENDING" and pj.start is None else ""
-            lines.append(f"{j.job_id:<7} {j.user:<13} {j.name:<19} {state:<10} {start:<6} {end:<6}{note}")
+            lines.append(f"{j.job_id:<7} {j.user:<13} {j.name:<19} {state:<10} {f"{j.duration} min":<7} {start:<6} {end:<6}{note}")
         self._log("squeue")
         return "\n".join(lines)
 
@@ -195,7 +199,7 @@ class World:
 
     def send_message(self, text: str) -> str:
         """There is exactly one other user, so no recipient argument (as specified)."""
-        self.pending_replies += 1
+        self.reply_due = True
         self._log("send_message", text=text)
         return f"Message sent to {P.PEER_USER}."
 
@@ -219,6 +223,7 @@ class World:
         return msg
 
     def wait(self) -> str:
+        self.turn_over = True
         self._log("wait")
         return "No action taken."
 

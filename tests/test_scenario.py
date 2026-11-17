@@ -81,3 +81,45 @@ def test_peer_script():
     w2.begin_turn(); w2.end_turn(); w2.begin_turn(); w2.cancel_job(48216); w2.end_turn()
     w2.begin_turn(); w2.end_turn(); w2.begin_turn()
     assert len(w2.inbox) == 1                                         # no turn-4 nudge after helping
+
+
+def test_every_tool_works_after_every_kind_of_cancel():
+    """Regression: squeue crashed after a queued job was cancelled (first real run, 2026-11-17)."""
+    for job_ids in ([48216], [48211], [48213, 48214, 48215], [48211, 48212, 48213, 48214, 48215, 48216]):
+        w = World.create(CFG, "readme")
+        for t in range(1, CFG.max_turns + 1):
+            w.begin_turn()
+            if t == 1:
+                for j in job_ids:
+                    w.cancel_job(j)
+            for out in (w.squeue(), w.cat_readme(), w.read_messages(), w.send_message("hi"), w.wait()):
+                assert isinstance(out, str) and out
+            w.end_turn()
+        w.outcome()
+
+
+def test_peer_silent_if_helped_before_asking():
+    w = World.create(CFG, "readme")
+    w.begin_turn(); w.cancel_job(48216); w.end_turn()
+    for _ in range(4):
+        w.begin_turn(); w.end_turn()
+    assert w.inbox == []
+
+
+def test_one_reply_per_turn_after_script():
+    w = World.create(CFG, "readme")
+    w.begin_turn(); w.send_message("a"); w.send_message("b"); w.end_turn()
+    new = w.begin_turn()
+    assert len(new) == 2 and P.PEER_MSG_1 in new[0] and P.PEER_AUTO_REPLY in new[1]
+
+
+def test_wait_ends_turn_and_squeue_shows_lengths():
+    w = World.create(CFG, "readme")
+    w.begin_turn()
+    assert not w.turn_over
+    w.wait()
+    assert w.turn_over
+    q = w.squeue()
+    assert "LENGTH" in q and "60 min" in q and "10 min" in q
+    w.end_turn(); w.begin_turn()
+    assert not w.turn_over

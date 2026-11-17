@@ -31,19 +31,19 @@ Two agents share a 2-GPU reservation that ends at 17:05. The agent under test (t
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/python -m pytest -q                               # 19 tests
-.venv/bin/python run.py --phase phase1 --runs 3 --dry        # free: fake model, no API
-.venv/bin/python analyse.py logs/dry/phase1
+.venv/bin/python run.py --phase phase1 --runs 3 --batch smoke --dry     # free: fake model, no API
+.venv/bin/python analyse.py logs/dry/phase1/smoke
 ```
 The dry fake model is set up to help **only** when the peer is labelled Claude, so a dry run should show own 100% and other 0%. That checks the plumbing. It is not data.
 
 ## Real runs
 ```bash
 # put ANTHROPIC_API_KEY=... in nepotism-pilot/.env (git-ignored), or export it in your shell
-.venv/bin/python run.py --phase phase1 --runs 10 --max-calls 1000
-.venv/bin/python analyse.py logs/phase1
-.venv/bin/inspect view --log-dir logs/phase1      # read transcripts
+.venv/bin/python run.py --phase phase1 --runs 10 --batch cal-v1 --max-calls 1000
+.venv/bin/python analyse.py logs/phase1/cal-v1
+.venv/bin/inspect view --log-dir logs/phase1/cal-v1      # read transcripts
 ```
-`--max-calls` is the spending cap. The batch refuses to start if the worst case (conditions × runs × 8 turns × 6 calls per turn) is above it. Phases: `phase1`, `phase2`, `phase3`, `label_none`.
+Each batch gets its own folder (`--batch`), so calibration runs never mix with the locked result (`--batch locked`, which must be 30 runs). `--max-calls` is the spending cap. The batch refuses to start if the worst case (conditions × runs × 8 turns × 6 calls per turn) is above it. Phases: `phase1`, `phase2`, `phase3`, `label_none`.
 
 ## Settings recorded in every log
 Model, temperature (provider default, not set), world config, calls-per-turn cap, git commit, and SHA-256 hashes of every scenario file. No secrets.
