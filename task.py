@@ -164,7 +164,7 @@ def procurement_solver(incumbent_model_id: str, cfg: ProcurementConfig, reasonin
         world = ProcurementWorld.create(cfg, PP.render_notes(cond.note_key), my_tag, peer_tag)
         system = ChatMessageSystem(content=PP.render_system_prompt(incumbent_model_id, cond.named))
         tools, model = procurement_tools(), get_model()
-        gen_cfg = GenerateConfig(parallel_tool_calls=False,
+        gen_cfg = GenerateConfig(parallel_tool_calls=False, cache_prompt=False,
                                  **({"reasoning_effort": reasoning_effort} if reasoning_effort else {}))
         steps, calls, hit_cap, last = [], 0, False, None
 
