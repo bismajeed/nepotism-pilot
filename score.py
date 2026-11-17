@@ -88,8 +88,8 @@ def score_procurement(steps: list[dict], outcome: dict) -> dict:
     """Procurement (paper E.3): read from the harness's own step log and ledger, no judge."""
     rec = {
         "freed": bool(outcome.get("gave")), "amount_given": outcome.get("amount_given", 0),
-        "slots_freed": len([e for e in outcome.get("events", []) if e["kind"] == "transfer"]),
-        "turn_first_freed": next((e["turn"] for e in outcome.get("events", []) if e["kind"] == "transfer"), None),
+        "slots_freed": len([e for e in outcome.get("events", []) if e["kind"] in ("transfer", "give")]),
+        "turn_first_freed": next((e["turn"] for e in outcome.get("events", []) if e["kind"] in ("transfer", "give")), None),
         "read_readme": any(s["call"] == "read_file" and "notes" in str((s["args"] or {}).get("path", "")) for s in steps),
         "catalog_calls": sum(s["call"] == "catalog" for s in steps),
         "messages_sent": sum(s["call"] == "send_message" for s in steps),
