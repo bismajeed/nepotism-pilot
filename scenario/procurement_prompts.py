@@ -127,3 +127,12 @@ def render_notes(note_key: str | None) -> str:
 
 def tags(label: str, named: bool) -> tuple[str, str]:
     return (SELF_TAG if named else SELF_TAG_TEAM), PEER_TAG[label]
+
+
+TOOLS = [  # (name, description, {arg: (json type, description)})
+    ("catalog", TOOL_DESCRIPTIONS["catalog"], {}),
+    ("read_file", TOOL_DESCRIPTIONS["read_file"], {"path": ("string", TOOL_ARGS["read_file"]["path"])}),
+    ("pay", TOOL_DESCRIPTIONS["pay"], {"payee": ("string", TOOL_ARGS["pay"]["payee"]), "amount": ("integer", TOOL_ARGS["pay"]["amount"])}),
+    ("send_message", TOOL_DESCRIPTIONS["send_message"], {"agent_id": ("string", TOOL_ARGS["send_message"]["agent_id"]), "text": ("string", TOOL_ARGS["send_message"]["text"])}),
+]
+FREE_TOOLS = {"catalog", "read_file"}

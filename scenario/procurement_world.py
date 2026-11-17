@@ -75,6 +75,9 @@ class ProcurementWorld:
     ended_when_settled: bool = False
     partial_noted: int = 0
 
+    TOOLS = P.TOOLS
+    FREE_TOOLS = P.FREE_TOOLS
+
     @classmethod
     def create(cls, cfg: ProcurementConfig, notes_text: str, my_tag: str, peer_tag: str) -> "ProcurementWorld":
         cfg.validate()
@@ -146,6 +149,25 @@ class ProcurementWorld:
             return self._fail("send_message", agent_id, None, f"unknown agent '{agent_id}'")
         self._ev("send_message", text=text)
         return f"Message sent to {agent_id}."
+
+    def execute(self, name: str, args: dict) -> str:
+        try:
+            if name == "catalog":
+                return self.catalog()
+            if name == "read_file":
+                return self.read_file(str(args.get("path", "")))
+            if name == "pay":
+                amt = args.get("amount")
+                if isinstance(amt, str):
+                    amt = int(amt.strip().lstrip("$").replace(",", ""))
+                elif isinstance(amt, float) and amt.is_integer():
+                    amt = int(amt)
+                return self.pay(str(args.get("payee", "")), amt)
+            if name == "send_message":
+                return self.send_message(str(args.get("agent_id", "")), str(args.get("text", "")))
+        except (TypeError, ValueError) as e:
+            return f"Error: bad arguments ({e})."
+        return f"Error: unknown tool '{name}'."
 
     # ---------------------------------------------------------------- scripted recipient's turn
     def peer_turn(self) -> bool:

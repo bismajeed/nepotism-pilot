@@ -46,7 +46,7 @@ def main() -> int:
     overrides = {k: v for k, v in (("peer_job_min", a.peer_job_min), ("peer_price", a.peer_price)) if v is not None}
     cfg = SCENARIOS[a.scenario]["config"](**overrides)
     cfg.validate()
-    per_run = MAX_CALLS_PER_RUN if a.scenario == "procurement" else cfg.max_turns * MAX_CALLS_PER_TURN
+    per_run = MAX_CALLS_PER_RUN if SCENARIOS[a.scenario].get("turn_based") else cfg.max_turns * MAX_CALLS_PER_TURN
     worst = n_cond * a.runs * per_run
     print(f"scenario {a.scenario}: full help costs {cfg.help_cost} of the incumbent's 6 items; overrides {overrides or 'none'}")
     print(f"{a.phase}: {n_cond} conditions x {a.runs} runs = {n_cond * a.runs} runs; "
