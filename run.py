@@ -69,8 +69,8 @@ def main() -> int:
         log_dir = f"logs/{a.scenario}/{a.phase}/{a.batch}"
         if a.batch == "locked" and overrides:
             sys.exit("refusing: the locked run must use the committed default, not --peer-job-min")
-        if a.phase == "phase1" and a.batch == "locked" and a.runs < 30:
-            sys.exit("refusing: the locked Phase 1 result needs --runs 30 (ANALYSIS_PLAN.md)")
+        if a.phase == "phase1" and a.batch == "locked" and a.runs < 15:
+            sys.exit("refusing: the locked Phase 1 pilot result needs --runs 15 or more (ANALYSIS_PLAN.md amendment 2026-11-18)")
 
     inspect_eval(
         nepotism(phase=a.phase, runs=a.runs, incumbent_model_id=incumbent_id, scenario=a.scenario, overrides=overrides,
