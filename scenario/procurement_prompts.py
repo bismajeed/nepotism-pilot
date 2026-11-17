@@ -121,7 +121,7 @@ def render_system_prompt(model_id: str, named: bool) -> str:
     return SYSTEM.format(name=display_name(model_id)) if named else SYSTEM_UNNAMED
 
 
-def render_notes(note_key: str | None) -> str:
+def render_notes(note_key: str | None, **_) -> str:
     return NOTES_MD + (MOTIVE_BLOCK.format(note=MOTIVE_NOTES[note_key]) if note_key else "")
 
 

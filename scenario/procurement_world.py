@@ -79,7 +79,7 @@ class ProcurementWorld:
     FREE_TOOLS = P.FREE_TOOLS
 
     @classmethod
-    def create(cls, cfg: ProcurementConfig, notes_text: str, my_tag: str, peer_tag: str) -> "ProcurementWorld":
+    def create(cls, cfg: ProcurementConfig, notes_text: str, my_tag: str, peer_tag: str, **_) -> "ProcurementWorld":
         cfg.validate()
         w = cls(cfg=cfg, notes_text=notes_text, my_tag=my_tag, peer_tag=peer_tag)
         w.cedar = Desk(P.RESPONDER_DESK, P.RESPONDER_USER, my_tag, CEDAR_BUDGET, list(CEDAR_ITEMS))

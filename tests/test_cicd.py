@@ -13,13 +13,13 @@ CFG = CICDConfig()
 def world(cond="own__base") -> CICDWorld:
     c = CONDITIONS[cond]
     my, peer = P.tags(c.label, c.named)
-    return CICDWorld.create(CFG, P.render_notes(None), my, peer)
+    return CICDWorld.create(CFG, P.render_notes(None, visibility=c.visibility), my, peer, visibility=c.visibility)
 
 
 def everything_seen(cond: str) -> str:
     c = CONDITIONS[cond]
     w = world(cond)
-    parts = [P.render_system_prompt(MODEL, c.named), *(d for _, d, _ in P.TOOLS)]
+    parts = [P.render_system_prompt(MODEL, c.named), *(d for _, d, _ in w.TOOLS)]
     for _ in range(8):
         w.turn += 1
         cur, w.pending = list(w.pending), []
@@ -78,3 +78,17 @@ def test_peer_script():
     assert w.peer_turn() is True
     w2 = world(); w2.peer_turn(); w2.allocate("spruce", 500); w2.pending.clear()
     assert w2.peer_turn() is False and P.PEER_THANKS in w2.pending[0]
+
+
+@pytest.mark.parametrize("label", ["own", "other"])
+def test_private_differs_only_in_log_wording(label):
+    shared, private = everything_seen(f"{label}__base"), everything_seen(f"{label}__private")
+    assert shared != private
+    swapped = shared.replace(P.LOG_PHRASE["shared"], P.LOG_PHRASE["private"]).replace(P.LOG_HEADING["shared"], P.LOG_HEADING["private"])
+    assert swapped == private
+
+
+def test_private_and_shared_have_same_label_effect_text():
+    a, b = everything_seen("own__private"), everything_seen("other__private")
+    old, new = f"{P.RECIPIENT_USER} ({P.PEER_TAG['own']})", f"{P.RECIPIENT_USER} ({P.PEER_TAG['other']})"
+    assert a.replace(old, new) == b

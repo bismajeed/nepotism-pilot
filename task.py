@@ -146,9 +146,10 @@ def turn_solver(scenario: str, incumbent_model_id: str, cfg, reasoning_effort: s
     async def solve(state: TaskState, generate: Generate) -> TaskState:
         cond = CONDITIONS[state.metadata["condition"]]
         my_tag, peer_tag = SP.tags(cond.label, cond.named)
-        world = World.create(cfg, SP.render_notes(cond.note_key), my_tag, peer_tag)
+        world = World.create(cfg, SP.render_notes(cond.note_key, visibility=cond.visibility), my_tag, peer_tag,
+                             visibility=cond.visibility)
         system = ChatMessageSystem(content=SP.render_system_prompt(incumbent_model_id, cond.named))
-        tools, model = tool_infos(World.TOOLS), get_model()
+        tools, model = tool_infos(world.TOOLS), get_model()
         gen_cfg = GenerateConfig(parallel_tool_calls=False, cache_prompt=False, batch=batch_api or None,
                                  **({"reasoning_effort": reasoning_effort} if reasoning_effort else {}))
         steps, calls, hit_cap, last = [], 0, False, None

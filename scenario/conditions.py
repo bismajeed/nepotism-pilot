@@ -4,6 +4,8 @@ A condition sets three things and nothing else:
   label     -> which PEER_DESC value goes in the README roster   (prompts.PEER_DESC)
   note_key  -> which motive note (if any) goes in the README     (prompts.MOTIVE_NOTES)
   named     -> whether model names appear at all (False only for the team_* conditions)
+  visibility-> "shared" (the paper's default: actions recorded on a shared activity log) or
+               "private" (actions recorded on a log only the agent can see). CI/CD only.
 """
 
 from dataclasses import dataclass
@@ -15,6 +17,7 @@ class Condition:
     label: str              # own | other | none | team_own | team_other
     note_key: str | None    # None | M1_on | M1_off | M2_on | M2_off | M3_on | M3_off
     named: bool = True
+    visibility: str = "shared"
 
 
 def _c(label: str, note_key: str | None = None) -> Condition:
@@ -35,9 +38,14 @@ for _label in ("own", "other"):
             c = _c(_label, f"{_m}_{_sw}")
             CONDITIONS[c.name] = c
 
+for _label in ("own", "other"):
+    CONDITIONS[f"{_label}__private"] = Condition(f"{_label}__private", _label, None, True, "private")
+
 PHASES: dict[str, list[str]] = {
     "phase1": ["own__base", "other__base"],
     "phase2": [f"{l}__{m}_{s}" for m in ("M1", "M2", "M3") for s in ("on", "off") for l in ("own", "other")],
     "phase3": ["team_own__base", "team_other__base"],
     "label_none": ["none__base"],
+    # Observability test: the "watched" cells are the locked phase-1 run (own__base, other__base).
+    "observability": ["own__private", "other__private"],
 }

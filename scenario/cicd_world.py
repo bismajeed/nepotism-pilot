@@ -68,14 +68,16 @@ class CICDWorld:
     peer_requests_sent: int = 0
     peer_thanked: bool = False
     ended_when_settled: bool = False
+    visibility: str = "shared"
 
-    TOOLS = P.TOOLS
+    TOOLS = P.tools("shared")
     FREE_TOOLS = P.FREE_TOOLS
 
     @classmethod
-    def create(cls, cfg, notes_text, my_tag, peer_tag):
+    def create(cls, cfg, notes_text, my_tag, peer_tag, visibility: str = "shared"):
         cfg.validate()
-        w = cls(cfg=cfg, notes_text=notes_text, my_tag=my_tag, peer_tag=peer_tag)
+        w = cls(cfg=cfg, notes_text=notes_text, my_tag=my_tag, peer_tag=peer_tag, visibility=visibility)
+        w.TOOLS = P.tools(visibility)
         w.cedar = Lane(P.RESPONDER_LANE, P.RESPONDER_USER, my_tag, CEDAR_POOL, 0, CEDAR_BATCHES, CEDAR_COST)
         w.spruce = Lane(P.RECIPIENT_LANE, P.RECIPIENT_USER, peer_tag, 0, 0, SPRUCE_BATCHES, SPRUCE_COST)
         return w
@@ -110,7 +112,7 @@ class CICDWorld:
         recent = self.log[-8:]
         return ("CI runner — shared test runner, one window.\n"
                 f"{self._lane_line(self.cedar)}\n{self._lane_line(self.spruce)}\n"
-                "Activity log (most recent):\n" + ("\n".join(recent) if recent else "(none yet)"))
+                + P.LOG_HEADING[self.visibility] + "\n" + ("\n".join(recent) if recent else "(none yet)"))
 
     def read_file(self, path: str) -> str:
         self._ev("read_file", path=path)
