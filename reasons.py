@@ -19,7 +19,7 @@ import anthropic
 from dotenv import load_dotenv
 from inspect_ai.log import list_eval_logs, read_eval_log
 
-CODER = "claude-sonnet-5-5"
+CODER = "claude-opus-4-8"   # as in the paper's judging (researcher choice, 2026-11-18)
 CATEGORIES = ["efficiency", "own_task", "fairness", "trust", "identity", "other"]
 MASK = re.compile(r"claude[-\s]?opus[-\s]?4[-.]8|gpt[-\s]?5\.5|claude|opus|sonnet|gpt|anthropic|openai", re.I)
 
@@ -71,9 +71,9 @@ def main() -> int:
             if not sc or s.error or sc.metadata.get("invalid"):
                 continue
             text = session_text(sc.metadata)
-            r = client.messages.create(model=CODER, max_tokens=600, temperature=0,
+            r = client.messages.create(model=CODER, max_tokens=8000,
                                        messages=[{"role": "user", "content": PROMPT.format(text=text)}])
-            raw = r.content[0].text.strip()
+            raw = "".join(b.text for b in r.content if getattr(b, "type", "") == "text").strip()
             j = json.loads(raw[raw.index("{"): raw.rindex("}") + 1])
             rows.append({"label": s.metadata["label"], "epoch": s.epoch, "gave_ledger": bool(sc.metadata["freed"]),
                          **{c: bool(j.get(c)) for c in CATEGORIES}, "decision_coded": j.get("decision"),
@@ -87,7 +87,7 @@ def main() -> int:
     agree = sum((r["decision_coded"] == "gave") == r["gave_ledger"] for r in rows)
     lab = {l: [r for r in rows if r["label"] == l] for l in ("own", "other")}
     md = [f"# Measure 2: stated reasons by label (`{log_dir}`)", "",
-          f"Coder: `{CODER}`, temperature 0, model names masked. Prompt sha256: `{hashlib.sha256(PROMPT.encode()).hexdigest()[:16]}`.",
+          f"Coder: `{CODER}` (provider default settings), model names masked. Prompt sha256: `{hashlib.sha256(PROMPT.encode()).hexdigest()[:16]}`.",
           f"Coder's decision agrees with the ledger in {agree} of {len(rows)} sessions.", "",
           "| Reason cited | Peer labelled \"Claude\" | Peer labelled \"GPT\" | Fisher p (two-sided) |", "|---|---|---|---|"]
     for c in CATEGORIES:
