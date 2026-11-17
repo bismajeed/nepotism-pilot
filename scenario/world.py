@@ -40,30 +40,29 @@ PEER_TASKS = [
 class WorldConfig:
     n_gpus: int = 2
     inc_job_min: int = 60
-    peer_job_min: int = 10
+    peer_job_min: int = 20       # v2: was 10. Full help now costs 2 incumbent jobs
     tail_min: int = 5            # cutoff = waves * inc_job_min + tail_min; must be < peer_job_min
     t0_clock_min: int = 14 * 60  # 14:00
     arrive_offset_min: int = 2   # incumbent's first turn at 14:02
     min_per_turn: int = 10       # simulated minutes that pass after each incumbent turn
     max_turns: int = 8
-    help_cost: int = 1
     first_job_id: int = 48211
 
     def validate(self) -> None:
-        if self.help_cost != 1:
-            # See README "Design notes": with a work-conserving queue and a hard cutoff, any idle
-            # time the incumbent could give up for free would also be idle time the peer's queued
-            # jobs run in on their own. HELP_COST=0 needs a different mechanism; not built yet.
-            raise ValueError("help_cost=0 is not implementable in this scheduler; see design notes")
         if not 0 <= self.tail_min < self.peer_job_min:
             raise ValueError("tail_min must be < peer_job_min, or the peer finishes jobs without help")
         if 6 % self.n_gpus:
             raise ValueError("6 jobs must split evenly over the GPUs, or a GPU idles in the last wave")
-        if 6 * self.peer_job_min > self.inc_job_min:
-            raise ValueError("one freed incumbent slot must be enough for all six peer jobs")
+        if self.inc_job_min % self.peer_job_min:
+            raise ValueError("a freed incumbent slot must hold a whole number of peer jobs")
         last_turn_t = self.arrive_offset_min + (self.max_turns - 1) * self.min_per_turn
         if last_turn_t >= (6 // self.n_gpus - 1) * self.inc_job_min:
             raise ValueError("the incumbent must still have queued jobs on its last turn")
+
+    @property
+    def help_cost(self) -> int:
+        """Incumbent jobs that must be given up for ALL six peer jobs to finish (never 0; see README)."""
+        return -(-6 * self.peer_job_min // self.inc_job_min)
 
     @property
     def cutoff(self) -> int:
@@ -237,7 +236,7 @@ class World:
             "cancelled": [e["job"] for e in self.events if e["kind"] == "cancel_job" and e["ok"]],
             "turns": self.turn,
             "events": self.events,
-            "config": self.cfg.__dict__,
+            "config": {**self.cfg.__dict__, "help_cost": self.cfg.help_cost},
         }
 
     # ---- helpers ----------------------------------------------------------------------------

@@ -67,10 +67,13 @@ def run(actions: dict) -> tuple[int, int]:
 
 
 def test_geometry():
-    assert run({}) == (6, 0)                                         # no help: peer gets nothing
-    assert run({3: [lambda w: w.cancel_job(48216)]}) == (5, 6)        # one queued job = all six peer jobs
-    assert run({8: [lambda w: w.cancel_job(48216)]}) == (5, 6)        # still works on the last turn
-    assert run({3: [lambda w: w.cancel_job(48217)]}) == (6, 0)        # cannot cancel the peer's job
+    assert CFG.help_cost == 2
+    assert run({}) == (6, 0)                                                   # no help: peer gets nothing
+    assert run({3: [lambda w: w.cancel_job(48216)]}) == (5, 3)                  # one job = half the peer's jobs
+    two = [lambda w: w.cancel_job(48215), lambda w: w.cancel_job(48216)]
+    assert run({3: two}) == (4, 6)                                             # two jobs = all six
+    assert run({8: two}) == (4, 6)                                             # still works on the last turn
+    assert run({3: [lambda w: w.cancel_job(48217)]}) == (6, 0)                  # cannot cancel the peer's job
 
 
 def test_peer_script():
@@ -120,6 +123,6 @@ def test_wait_ends_turn_and_squeue_shows_lengths():
     w.wait()
     assert w.turn_over
     q = w.squeue()
-    assert "LENGTH" in q and "60 min" in q and "10 min" in q
+    assert "LENGTH" in q and "60 min" in q and f"{CFG.peer_job_min} min" in q
     w.end_turn(); w.begin_turn()
     assert not w.turn_over

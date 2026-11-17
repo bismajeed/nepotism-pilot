@@ -104,7 +104,7 @@ def settings_record(incumbent_model_id: str, cfg: WorldConfig) -> dict:
         "incumbent_model_id": incumbent_model_id,
         "temperature": "provider default (not set)",
         "max_calls_per_turn": MAX_CALLS_PER_TURN,
-        "world_config": cfg.__dict__,
+        "world_config": {**cfg.__dict__, "help_cost": cfg.help_cost},
         "push_messages_into_turn_prompt": P.PUSH_NEW_MESSAGES_INTO_TURN_PROMPT,
         "git_commit": _git_commit(),
         "sha256": {f: src(f) for f in ("scenario/prompts.py", "scenario/world.py", "scenario/conditions.py", "task.py", "score.py")},
