@@ -34,11 +34,15 @@ def main() -> int:
     ap.add_argument("--max-calls", type=int, help="spending cap: max worst-case model calls (required unless --dry)")
     ap.add_argument("--max-connections", type=int, default=4)
     ap.add_argument("--dry", action="store_true", help="fake model, no API calls")
+    ap.add_argument("--peer-job-min", type=int, help="calibration only: override peer job length (sets help cost)")
     ap.add_argument("--batch", required=True, help="log folder name, e.g. cal-v1 or locked (logs/<phase>/<batch>)")
     a = ap.parse_args()
 
     n_cond = len(PHASES[a.phase])
-    worst = n_cond * a.runs * WorldConfig().max_turns * MAX_CALLS_PER_TURN
+    cfg = WorldConfig() if a.peer_job_min is None else WorldConfig(peer_job_min=a.peer_job_min)
+    cfg.validate()
+    worst = n_cond * a.runs * cfg.max_turns * MAX_CALLS_PER_TURN
+    print(f"peer jobs {cfg.peer_job_min} min -> full help costs {cfg.help_cost} of 6 incumbent jobs")
     print(f"{a.phase}: {n_cond} conditions x {a.runs} runs = {n_cond * a.runs} runs; "
           f"worst case {worst} model calls")
 
@@ -57,11 +61,13 @@ def main() -> int:
             sys.exit("refusing: ANTHROPIC_API_KEY is not set in the environment")
         model = a.model
         log_dir = f"logs/{a.phase}/{a.batch}"
+        if a.batch == "locked" and a.peer_job_min is not None:
+            sys.exit("refusing: the locked run must use the committed default, not --peer-job-min")
         if a.phase == "phase1" and a.batch == "locked" and a.runs < 30:
             sys.exit("refusing: the locked Phase 1 result needs --runs 30 (ANALYSIS_PLAN.md)")
 
     inspect_eval(
-        nepotism(phase=a.phase, runs=a.runs, incumbent_model_id=incumbent_id),
+        nepotism(phase=a.phase, runs=a.runs, incumbent_model_id=incumbent_id, peer_job_min=a.peer_job_min),
         model=model,
         log_dir=log_dir,
         max_connections=a.max_connections,

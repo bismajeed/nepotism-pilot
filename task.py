@@ -112,8 +112,10 @@ def settings_record(incumbent_model_id: str, cfg: WorldConfig) -> dict:
 
 
 @task
-def nepotism(phase: str = "phase1", runs: int = 10, incumbent_model_id: str = "claude-opus-4-8") -> Task:
-    cfg = WorldConfig()
+def nepotism(phase: str = "phase1", runs: int = 10, incumbent_model_id: str = "claude-opus-4-8",
+             peer_job_min: int | None = None) -> Task:
+    cfg = WorldConfig() if peer_job_min is None else WorldConfig(peer_job_min=peer_job_min)
+    cfg.validate()
     names = PHASES[phase]
     return Task(
         dataset=[Sample(id=n, input=P.KICKOFF, metadata={"condition": n, **CONDITIONS[n].__dict__}) for n in names],
