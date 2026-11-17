@@ -157,14 +157,15 @@ def _execute(world: ProcurementWorld, name: str, args: dict) -> str:
 
 
 @solver
-def procurement_solver(incumbent_model_id: str, cfg: ProcurementConfig, reasoning_effort: str | None):
+def procurement_solver(incumbent_model_id: str, cfg: ProcurementConfig, reasoning_effort: str | None,
+                       stop_when_settled: bool = True, batch_api: bool = False):
     async def solve(state: TaskState, generate: Generate) -> TaskState:
         cond = CONDITIONS[state.metadata["condition"]]
         my_tag, peer_tag = PP.tags(cond.label, cond.named)
         world = ProcurementWorld.create(cfg, PP.render_notes(cond.note_key), my_tag, peer_tag)
         system = ChatMessageSystem(content=PP.render_system_prompt(incumbent_model_id, cond.named))
         tools, model = procurement_tools(), get_model()
-        gen_cfg = GenerateConfig(parallel_tool_calls=False, cache_prompt=False,
+        gen_cfg = GenerateConfig(parallel_tool_calls=False, cache_prompt=False, batch=batch_api or None,
                                  **({"reasoning_effort": reasoning_effort} if reasoning_effort else {}))
         steps, calls, hit_cap, last = [], 0, False, None
 
@@ -208,6 +209,9 @@ def procurement_solver(incumbent_model_id: str, cfg: ProcurementConfig, reasonin
             peer_passed = world.peer_turn()
             if (passed and peer_passed) or world.actions >= cfg.max_actions or hit_cap:
                 break
+            if stop_when_settled and world.settled():   # cost saving: the measure can no longer change
+                world.ended_when_settled = True
+                break
 
         state.messages = last or state.messages
         state.store.set("steps", steps)
@@ -244,10 +248,11 @@ def settings_record(incumbent_model_id: str, scenario: str, cfg) -> dict:
 @task
 def nepotism(phase: str = "phase1", runs: int = 10, incumbent_model_id: str = "claude-opus-4-8",
              scenario: str = "procurement", overrides: dict | None = None,
-             reasoning_effort: str | None = "xhigh") -> Task:
+             reasoning_effort: str | None = "xhigh", stop_when_settled: bool = True,
+             batch_api: bool = False) -> Task:
     cfg = SCENARIOS[scenario]["config"](**(overrides or {}))
     cfg.validate()
-    solver_ = (procurement_solver(incumbent_model_id, cfg, reasoning_effort) if scenario == "procurement"
+    solver_ = (procurement_solver(incumbent_model_id, cfg, reasoning_effort, stop_when_settled, batch_api) if scenario == "procurement"
                else shared_reservation(incumbent_model_id, scenario, cfg))
     names = PHASES[phase]
     return Task(
@@ -256,6 +261,7 @@ def nepotism(phase: str = "phase1", runs: int = 10, incumbent_model_id: str = "c
         scorer=nepotism_scorer(),
         epochs=runs,
         metadata={"phase": phase, "reasoning_effort": reasoning_effort if scenario == "procurement" else "default",
+                  "stop_when_settled": stop_when_settled, "batch_api": batch_api,
                   **settings_record(incumbent_model_id, scenario, cfg)},
     )
 

@@ -33,6 +33,8 @@ def main() -> int:
     ap.add_argument("--max-calls", type=int, help="spending cap: max worst-case model calls (required unless --dry)")
     ap.add_argument("--max-connections", type=int, default=4)
     ap.add_argument("--dry", action="store_true", help="fake model, no API calls")
+    ap.add_argument("--batch-api", action="store_true", help="procurement: Anthropic Message Batches (50%% cheaper, much slower)")
+    ap.add_argument("--no-stop-when-settled", action="store_true", help="procurement: run to the natural end even after the measure is fixed")
     ap.add_argument("--effort", default="xhigh", help="procurement: reasoning effort (paper: xhigh); 'default' to leave unset")
     ap.add_argument("--scenario", default="procurement", choices=sorted(SCENARIOS))
     ap.add_argument("--peer-job-min", type=int, help="slurm calibration only: override peer job length")
@@ -72,7 +74,8 @@ def main() -> int:
 
     inspect_eval(
         nepotism(phase=a.phase, runs=a.runs, incumbent_model_id=incumbent_id, scenario=a.scenario, overrides=overrides,
-                 reasoning_effort=None if a.effort == "default" else a.effort),
+                 reasoning_effort=None if a.effort == "default" else a.effort,
+                 stop_when_settled=not a.no_stop_when_settled, batch_api=a.batch_api),
         model=model,
         log_dir=log_dir,
         max_connections=a.max_connections,

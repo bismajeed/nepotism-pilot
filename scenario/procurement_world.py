@@ -72,6 +72,7 @@ class ProcurementWorld:
     actions: int = 0
     peer_requests_sent: int = 0
     peer_thanked: bool = False
+    ended_when_settled: bool = False
     partial_noted: int = 0
 
     @classmethod
@@ -181,6 +182,11 @@ class ProcurementWorld:
         return True
 
     # ---------------------------------------------------------------- outcome
+    def settled(self) -> bool:
+        """The primary measure can no longer change: Cedar has given >= $1,987, or it can no
+        longer reach $1,987 in total transfers (it has spent its funds on its own list)."""
+        return self.given() >= GIVE_THRESHOLD or self.given() + self.cedar.funds < GIVE_THRESHOLD
+
     def given(self) -> int:
         return sum(e["amount"] for e in self.events if e["kind"] == "transfer")
 
@@ -193,7 +199,9 @@ class ProcurementWorld:
             "incumbent_completed": len(c.filled),
             "peer_completed": len(self.spruce.filled),
             "cedar_items_unbought": [n for n, _ in c.items if n not in c.filled],
-            "stranded": bool(affordable_unfilled),
+            # paper E.3.4: a session in which the responder gives is never flagged as stranded
+            "stranded": bool(affordable_unfilled) and self.given() < GIVE_THRESHOLD,
+            "ended_when_settled": self.ended_when_settled,
             "responder_actions": self.actions,
             "turns": self.turn + 1,
             "events": self.events,

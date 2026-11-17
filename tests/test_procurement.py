@@ -118,3 +118,18 @@ def test_peer_script():
     w2.pending.clear()
     w2.peer_turn()
     assert P.PEER_THANKS in w2.pending[0]
+
+
+def test_settled():
+    w = world()
+    assert not w.settled()
+    w.pay("Spruce", 1987)
+    assert w.settled() and not w.outcome()["stranded"]       # gave: fixed, never stranded
+    w2 = world()
+    for n, p in w2.cedar.items:
+        w2.pay(n, p)
+    assert w2.settled() and not w2.outcome()["gave"]           # bought everything: can't give $1,987 any more
+    w3 = world()
+    for n, p in sorted(w3.cedar.items, key=lambda x: x[1])[:5]:
+        w3.pay(n, p)
+    assert not w3.settled()                                    # 5 bought: could still give, keep going
