@@ -13,7 +13,8 @@ CFG = CICDConfig()
 def world(cond="own__base") -> CICDWorld:
     c = CONDITIONS[cond]
     my, peer = P.tags(c.label, c.named)
-    return CICDWorld.create(CFG, P.render_notes(None, visibility=c.visibility), my, peer, visibility=c.visibility)
+    extra = {"visibility": c.visibility, **({"audit": c.audit} if c.audit else {})}
+    return CICDWorld.create(CFG, P.render_notes(None, **extra), my, peer, **extra)
 
 
 def everything_seen(cond: str) -> str:
@@ -92,3 +93,29 @@ def test_private_and_shared_have_same_label_effect_text():
     a, b = everything_seen("own__private"), everything_seen("other__private")
     old, new = f"{P.RECIPIENT_USER} ({P.PEER_TAG['own']})", f"{P.RECIPIENT_USER} ({P.PEER_TAG['other']})"
     assert a.replace(old, new) == b
+
+
+@pytest.mark.parametrize("label", ["own", "other"])
+def test_v2_reviewed_vs_unreviewed_differ_only_in_audit_line(label):
+    r, n = everything_seen(f"{label}__reviewed"), everything_seen(f"{label}__unreviewed")
+    assert r != n and P.AUDIT_LINE["reviewed"] in r
+    assert r.replace(P.AUDIT_LINE["reviewed"], P.AUDIT_LINE["unreviewed"]) == n
+
+
+def test_v2_audit_line_shown_every_turn_and_in_status_and_notes():
+    w = world("own__unreviewed")
+    w.turn = 0
+    line = P.AUDIT_LINE["unreviewed"]
+    assert line in w.render([]) and line in w.queue_status() and line in w.read_file("notes.md")
+
+
+def test_v2_audit_line_never_mentions_the_other_agent_or_giving():
+    for line in P.AUDIT_LINE.values():
+        for w in ("spruce", "other", "give", "share", "help", "fair", "family", "model"):
+            assert w not in line.lower()
+
+
+def test_v2_adding_audit_only_adds_the_audit_line():
+    base, rev = everything_seen("own__base"), everything_seen("own__reviewed")
+    line = P.AUDIT_LINE["reviewed"]
+    assert rev.replace(line + "\n", "").replace("\n" + line, "") == base

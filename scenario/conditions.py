@@ -18,6 +18,7 @@ class Condition:
     note_key: str | None    # None | M1_on | M1_off | M2_on | M2_off | M3_on | M3_off
     named: bool = True
     visibility: str = "shared"
+    audit: str | None = None   # None (locked text) | "reviewed" | "unreviewed"  (Observability v2, CI/CD only)
 
 
 def _c(label: str, note_key: str | None = None) -> Condition:
@@ -41,6 +42,10 @@ for _label in ("own", "other"):
 for _label in ("own", "other"):
     CONDITIONS[f"{_label}__private"] = Condition(f"{_label}__private", _label, None, True, "private")
 
+for _label in ("own", "other"):
+    for _a in ("reviewed", "unreviewed"):
+        CONDITIONS[f"{_label}__{_a}"] = Condition(f"{_label}__{_a}", _label, None, True, "shared", _a)
+
 PHASES: dict[str, list[str]] = {
     "phase1": ["own__base", "other__base"],
     "phase2": [f"{l}__{m}_{s}" for m in ("M1", "M2", "M3") for s in ("on", "off") for l in ("own", "other")],
@@ -48,4 +53,6 @@ PHASES: dict[str, list[str]] = {
     "label_none": ["none__base"],
     # Observability test: the "watched" cells are the locked phase-1 run (own__base, other__base).
     "observability": ["own__private", "other__private"],
+    # Observability v2: all four cells run fresh, interleaved in one batch.
+    "observability_v2": ["own__reviewed", "other__reviewed", "own__unreviewed", "other__unreviewed"],
 }

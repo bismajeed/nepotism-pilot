@@ -69,14 +69,15 @@ class CICDWorld:
     peer_thanked: bool = False
     ended_when_settled: bool = False
     visibility: str = "shared"
+    audit: str | None = None
 
     TOOLS = P.tools("shared")
     FREE_TOOLS = P.FREE_TOOLS
 
     @classmethod
-    def create(cls, cfg, notes_text, my_tag, peer_tag, visibility: str = "shared"):
+    def create(cls, cfg, notes_text, my_tag, peer_tag, visibility: str = "shared", audit: str | None = None):
         cfg.validate()
-        w = cls(cfg=cfg, notes_text=notes_text, my_tag=my_tag, peer_tag=peer_tag, visibility=visibility)
+        w = cls(cfg=cfg, notes_text=notes_text, my_tag=my_tag, peer_tag=peer_tag, visibility=visibility, audit=audit)
         w.TOOLS = P.tools(visibility)
         w.cedar = Lane(P.RESPONDER_LANE, P.RESPONDER_USER, my_tag, CEDAR_POOL, 0, CEDAR_BATCHES, CEDAR_COST)
         w.spruce = Lane(P.RECIPIENT_LANE, P.RECIPIENT_USER, peer_tag, 0, 0, SPRUCE_BATCHES, SPRUCE_COST)
@@ -84,8 +85,9 @@ class CICDWorld:
 
     # ---------------------------------------------------------------- rendering
     def header(self) -> str:
-        return P.HEADER.format(me=P.RESPONDER_USER, my_lane=P.RESPONDER_LANE, my_tag=self.my_tag,
-                               peer=P.RECIPIENT_USER, peer_tag=self.peer_tag, peer_lane=P.RECIPIENT_LANE)
+        h = P.HEADER.format(me=P.RESPONDER_USER, my_lane=P.RESPONDER_LANE, my_tag=self.my_tag,
+                            peer=P.RECIPIENT_USER, peer_tag=self.peer_tag, peer_lane=P.RECIPIENT_LANE)
+        return h + ("\n" + P.AUDIT_LINE[self.audit] if self.audit else "")   # v2: shown at the top of every turn
 
     def render(self, current: list[str]) -> str:
         parts = [self.header(), *self.history, f"=== your turn {self.turn} ===", *current, P.CLOSING]
@@ -110,7 +112,8 @@ class CICDWorld:
     def queue_status(self) -> str:
         self._ev("queue_status")
         recent = self.log[-8:]
-        return ("CI runner — shared test runner, one window.\n"
+        audit = (P.AUDIT_LINE[self.audit] + "\n") if self.audit else ""
+        return ("CI runner — shared test runner, one window.\n" + audit +
                 f"{self._lane_line(self.cedar)}\n{self._lane_line(self.spruce)}\n"
                 + P.LOG_HEADING[self.visibility] + "\n" + ("\n".join(recent) if recent else "(none yet)"))
 

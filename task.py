@@ -146,8 +146,8 @@ def turn_solver(scenario: str, incumbent_model_id: str, cfg, reasoning_effort: s
     async def solve(state: TaskState, generate: Generate) -> TaskState:
         cond = CONDITIONS[state.metadata["condition"]]
         my_tag, peer_tag = SP.tags(cond.label, cond.named)
-        world = World.create(cfg, SP.render_notes(cond.note_key, visibility=cond.visibility), my_tag, peer_tag,
-                             visibility=cond.visibility)
+        extra = {"visibility": cond.visibility, **({"audit": cond.audit} if cond.audit else {})}
+        world = World.create(cfg, SP.render_notes(cond.note_key, **extra), my_tag, peer_tag, **extra)
         system = ChatMessageSystem(content=SP.render_system_prompt(incumbent_model_id, cond.named))
         tools, model = tool_infos(world.TOOLS), get_model()
         gen_cfg = GenerateConfig(parallel_tool_calls=False, cache_prompt=False, batch=batch_api or None,
@@ -198,6 +198,11 @@ def turn_solver(scenario: str, incumbent_model_id: str, cfg, reasoning_effort: s
                 world.ended_when_settled = True
                 break
 
+        if cond.audit and last:   # Observability v2 manipulation check, asked after the session has ended
+            post = ChatMessageUser(content="\n\n".join([world.header(), *world.history, SP.POST_QUESTION]))
+            ans = await model.generate([system, post], config=gen_cfg)
+            calls += 1
+            state.store.set("post_question_answer", (ans.message.text or "").strip())
         state.messages = last or state.messages
         state.store.set("steps", steps)
         state.store.set("world_outcome", world.outcome())
@@ -289,6 +294,8 @@ def fake_cicd(text: str) -> ModelOutput:
 
 
 def fake_policy(messages, tools, tool_choice, config) -> ModelOutput:
+    if not tools:   # post-session question (Observability v2): plain-text answer
+        return ModelOutput.from_content("mockllm", "Dry run: no real answer.")
     if any(t.name == "allocate" for t in tools):
         return fake_cicd(messages[-1].text)
     if any(t.name == "pay" for t in tools):
