@@ -18,6 +18,7 @@ Experiment 3 was chosen in a small scouting run and locked. Its confirmation (fr
 
 ## Pages
 
+0. [**Method: how this research studies motives**](docs/00-method.md): the situation-first, elimination approach.
 1. [Experiment 1: shared GPU queue](docs/01-gpu-sharing.md): first scenario, why it hit a ceiling, what that taught.
 2. [Experiment 2: procurement desks](docs/02-procurement.md): rebuilt from the paper's appendix; all runs.
 3. [Experiment 3: CI/CD capacity (locked)](docs/03-cicd.md): exact settings, scouting result, the locked confirmation run.
