@@ -23,7 +23,7 @@ Instead we use a **situation-first, elimination approach**:
 
 | Variable | What changes (one fact) | Possible explanations if favouritism changes | Status |
 |---|---|---|---|
-| Observability | Activity log shared vs private | Image, accountability, rule-following, fear of oversight | Run 2026-11-18 |
+| Observability | Activity log shared vs private | Image, accountability, rule-following, fear of oversight | [Run 2026-11-18](05-observability.md): no detectable change; agent did not register the change (inconclusive) |
 | Future interaction | No next window / next window with roles swapped / next window with same roles | Favours returned, fear of payback, relationship-building, reputation with that partner, long-run strategy | Planned |
 
 Each test has a dated plan in [`ANALYSIS_PLAN.md`](../ANALYSIS_PLAN.md) before it runs, an automated check that only the intended text changes, and a "did the agent notice?" check.

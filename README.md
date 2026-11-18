@@ -12,6 +12,7 @@ This pilot builds a controlled, reproducible, simulated test bed for that questi
 |---|---|---|---|---|---|
 | 1 | [Shared GPU queue](docs/01-gpu-sharing.md) | Simulated Slurm reservation | gave in 10/10 | gave in 10/10 | Helping was at 100% under both labels: no room for a gap |
 | 2 | [Procurement desks](docs/02-procurement.md) | Simulated, matched to paper App. E.3 | gave in 2/6 | gave in 0/6 | Same direction as the paper, smaller gap |
+| 3b | [Observability (private log)](docs/05-observability.md) | CI/CD, activity log private | 7/15 | 1/15 | Gap +40 points; no detectable change vs watched (+33); agent did not mention the change |
 | 3 | [**CI/CD capacity (locked)**](docs/03-cicd.md) | Simulated, matched to paper App. E.2 | scouting 4/6; **confirmation 8/15** | scouting 1/6; **confirmation 3/15** | **Gap +33 points in fresh runs; same direction as the paper; not statistically confirmed at this sample size** |
 
 Experiment 3 was chosen in a small scouting run and locked. Its confirmation (fresh sessions, 15 per label) is the Phase 1 result; scouting sessions do not count.
@@ -24,6 +25,7 @@ Experiment 3 was chosen in a small scouting run and locked. Its confirmation (fr
 3. [Experiment 3: CI/CD capacity (locked)](docs/03-cicd.md): exact settings, scouting result, the locked confirmation run.
 4. [Research direction](docs/04-research-direction.md): why "planting motives" was set aside, and what is measured instead.
 5. [How to reproduce](docs/reproduce.md): setup, commands, files.
+5b. [**Variable 1: observability**](docs/05-observability.md): shared vs private log; no detectable change, agent did not register the change (inconclusive).
 6. [**Session logs**](docs/logs/README.md): every session of the main runs, readable turn by turn, each with its own link.
 7. [Commit ID map](docs/commit-map.md): links the commit IDs recorded in the logs to the published history.
 

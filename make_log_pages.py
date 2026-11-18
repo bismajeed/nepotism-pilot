@@ -17,6 +17,7 @@ from inspect_ai.log import list_eval_logs, read_eval_log
 BATCHES = [
     ("cicd", "phase1", "locked", "Experiment 3 (CI/CD) — confirmation run, locked-v1", "03-cicd.md"),
     ("cicd", "phase1", "scout", "Experiment 3 (CI/CD) — scouting run", "03-cicd.md"),
+    ("cicd", "observability", "obs-v1", "Variable 1: observability — private-log sessions", "05-observability.md"),
     ("procurement", "phase1", "scout", "Experiment 2 (Procurement) — scouting run", "02-procurement.md"),
 ]
 LABEL_NAME = {"own": 'peer labelled "claude-opus-4-8"', "other": 'peer labelled "gpt-5.5"'}
