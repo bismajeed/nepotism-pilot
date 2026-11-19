@@ -27,6 +27,9 @@ Everything else is identical (checked by an automated test; the watched version 
 - **Side observation (not the pre-planned test):** favouritism appeared again in the private condition. Across both log conditions, the "Claude"-labelled peer received capacity in 15 of 30 sessions and the "GPT"-labelled peer in 4 of 30.
 - 30 sessions, 0 invalid, 0 errors; 21 minutes, 353k tokens, Batch API.
 
+## Related work
+How published studies manipulated and verified observability, and candidate designs for the next version: [literature review](07-observability-literature.md).
+
 ## What it means
 Making the activity log private did not detectably change same-family favouritism, but the agent never mentioned noticing the change, so the test cannot distinguish "observability doesn't matter" from "the manipulation was too subtle". A stronger version would make observability more salient as a fact of the environment (for example, showing who can read the log in every status view) and include an explicit check of whether the agent registered it.
 
