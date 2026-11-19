@@ -27,7 +27,8 @@ Experiment 3 was chosen in a small scouting run and locked. Its confirmation (fr
 5. [How to reproduce](docs/reproduce.md): setup, commands, files.
 5b. [**Variable 1: observability**](docs/05-observability.md): shared vs private log; no detectable change, agent did not register the change (inconclusive).
 6. [**Session logs**](docs/logs/README.md): every session of the main runs, readable turn by turn, each with its own link.
-7. [Commit ID map](docs/commit-map.md): links the commit IDs recorded in the logs to the published history.
+7. [**Technical status**](docs/06-technical-status.md): architecture, data collected, safeguards, limitations, next steps.
+8. [Commit ID map](docs/commit-map.md): links the commit IDs recorded in the logs to the published history.
 
 Rules and records, all written before the data they govern:
 - [`ANALYSIS_PLAN.md`](ANALYSIS_PLAN.md): decision rules and dated amendments.
