@@ -55,4 +55,6 @@ PHASES: dict[str, list[str]] = {
     "observability": ["own__private", "other__private"],
     # Observability v2: all four cells run fresh, interleaved in one batch.
     "observability_v2": ["own__reviewed", "other__reviewed", "own__unreviewed", "other__unreviewed"],
+    # Audit vs no audit, side by side (follow-up to the exploratory v2 finding).
+    "audit_vs_none": ["own__base", "other__base", "own__unreviewed", "other__unreviewed"],
 }
