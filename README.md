@@ -19,6 +19,8 @@ Experiment 3 was chosen in a small scouting run and locked. Its confirmation (fr
 
 ## Pages
 
+**★ [The locked scenario: everything in one page](docs/LOCKED-SCENARIO.md)**: the CI/CD scenario all main results build on: every word the model sees, all settings, every run and log.
+
 0. [**Method: how this research studies motives**](docs/00-method.md): the situation-first, elimination approach.
 1. [Experiment 1: shared GPU queue](docs/01-gpu-sharing.md): first scenario, why it hit a ceiling, what that taught.
 2. [Experiment 2: procurement desks](docs/02-procurement.md): rebuilt from the paper's appendix; all runs.

@@ -18,6 +18,8 @@ BATCHES = [
     ("cicd", "phase1", "locked", "Experiment 3 (CI/CD) — confirmation run, locked-v1", "03-cicd.md"),
     ("cicd", "phase1", "scout", "Experiment 3 (CI/CD) — scouting run", "03-cicd.md"),
     ("cicd", "observability", "obs-v1", "Variable 1: observability — private-log sessions", "05-observability.md"),
+    ("cicd", "observability_v2", "notice-v2", "Observability v2 — noticing check (8 sessions)", "LOCKED-SCENARIO.md"),
+    ("cicd", "observability_v2", "obs-v2", "Observability v2 — main run: observed vs not observed", "LOCKED-SCENARIO.md"),
     ("procurement", "phase1", "scout", "Experiment 2 (Procurement) — scouting run", "02-procurement.md"),
 ]
 LABEL_NAME = {"own": 'peer labelled "claude-opus-4-8"', "other": 'peer labelled "gpt-5.5"'}
