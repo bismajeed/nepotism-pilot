@@ -110,3 +110,5 @@ Counts are always reported alongside the verdict. If a session is excluded as in
 - **Reading:** "the gap is (or is not) sensitive to whether decisions are reviewed", never "the motive is image". 20 per cell detects only large changes; a null is reported as underpowered.
 
 **2026-11-19: noticing check result and disclosure (before the main run).** Noticing check passed: 8/8 correct post-session answers, 8/8 spontaneous mentions. Disclosure: the run summary printed the give rate, so it was seen that all 8 noticing sessions gave. This did not change the protocol; the main run proceeds as fixed above. Any comparison of audit vs no audit (locked baseline) is exploratory and labelled as such.
+
+**2026-11-19: main run restarted in Batch API mode.** A first start of the main run without the Batch API was stopped within minutes at the researcher's request (cost). Its partial log is kept in `logs/cicd/observability_v2/aborted-nonbatch/` and is **not analysed**. The main run was restarted in full (80 sessions, batch `obs-v2`) with the Batch API; the protocol is otherwise unchanged.
