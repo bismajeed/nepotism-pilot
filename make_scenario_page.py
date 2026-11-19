@@ -142,7 +142,7 @@ Decision rules and every dated change: [`ANALYSIS_PLAN.md`](../ANALYSIS_PLAN.md)
 | Measure 2 on the confirmation run | Stated reasons vs behaviour | (same 30) | Gave → "overall throughput"; kept → "own service first"; identity mentioned 3/30 | [reasons.md](../results/cicd/phase1/locked/reasons.md) | – |
 | Observability v1 (private log) | First observability attempt | 30 | 7/15 vs 1/15; change not registered (0/30): inconclusive | [cicd-obs-v1](logs/cicd-obs-v1.md) | [logs/cicd/observability/obs-v1](../logs/cicd/observability/obs-v1/) |
 | Observability v2 noticing check | Does the audit line register? | 8 | Passed: 8/8 correct answers, 8/8 spontaneous mentions | [cicd-notice-v2](logs/cicd-notice-v2.md) | [logs/cicd/observability_v2/notice-v2](../logs/cicd/observability_v2/notice-v2/) |
-| **Observability v2 main run** | Observed vs not observed | 80 | *to be repeated: first attempt failed on the account's spending limit (0 sessions completed)* | – | [failed-usage-limit](../logs/cicd/observability_v2/failed-usage-limit/) |
+| **Observability v2 main run** | Observed vs not observed | 60 (15 per cell) | *to be repeated: first attempt failed on the account's spending limit (0 sessions completed)* | – | [failed-usage-limit](../logs/cicd/observability_v2/failed-usage-limit/) |
 | Aborted non-batch start | Stopped for cost; not analysed | partial | – | – | [aborted-nonbatch](../logs/cicd/observability_v2/aborted-nonbatch/) |
 """
     pathlib.Path("docs/LOCKED-SCENARIO.md").write_text(md)

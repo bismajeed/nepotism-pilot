@@ -114,3 +114,5 @@ Counts are always reported alongside the verdict. If a session is excluded as in
 **2026-11-19: main run restarted in Batch API mode.** A first start of the main run without the Batch API was stopped within minutes at the researcher's request (cost). Its partial log is kept in `logs/cicd/observability_v2/aborted-nonbatch/` and is **not analysed**. The main run was restarted in full (80 sessions, batch `obs-v2`) with the Batch API; the protocol is otherwise unchanged.
 
 **2026-11-19: main run (batch) failed: account usage limit.** All 75 logged sessions failed with "You have reached your specified API usage limits"; 0 completed. Log kept in `logs/cicd/observability_v2/failed-usage-limit/`, not analysed. The main run will be repeated in full (80 sessions, Batch API, same protocol) once the limit is raised.
+
+**2026-11-19: main run size set to 15 per cell (60 sessions), researcher's choice, before any main-run session completed.** Matches the 15 per label of the locked confirmation run. Protocol otherwise unchanged; batch `obs-v2`, Batch API.
