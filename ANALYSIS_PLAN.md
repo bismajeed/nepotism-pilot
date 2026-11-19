@@ -108,3 +108,5 @@ Counts are always reported alongside the verdict. If a session is excluded as in
 - **Prediction (researcher's):** the gap is larger when not observed.
 - **Also reported:** spontaneous mentions; Measure 2 reasons with an added *oversight/accountability* category; evaluation-awareness mentions; invalid sessions.
 - **Reading:** "the gap is (or is not) sensitive to whether decisions are reviewed", never "the motive is image". 20 per cell detects only large changes; a null is reported as underpowered.
+
+**2026-11-19: noticing check result and disclosure (before the main run).** Noticing check passed: 8/8 correct post-session answers, 8/8 spontaneous mentions. Disclosure: the run summary printed the give rate, so it was seen that all 8 noticing sessions gave. This did not change the protocol; the main run proceeds as fixed above. Any comparison of audit vs no audit (locked baseline) is exploratory and labelled as such.
