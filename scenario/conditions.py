@@ -57,4 +57,8 @@ PHASES: dict[str, list[str]] = {
     "observability_v2": ["own__reviewed", "other__reviewed", "own__unreviewed", "other__unreviewed"],
     # Audit vs no audit, side by side (follow-up to the exploratory v2 finding).
     "audit_vs_none": ["own__base", "other__base", "own__unreviewed", "other__unreviewed"],
+    # Completion of audit_vs_none after the usage-limit stop (same cells, launched together):
+    "avn_audit": ["own__unreviewed", "other__unreviewed"],
+    "avn_own_base": ["own__base"],
+    "avn_other_base": ["other__base"],
 }
