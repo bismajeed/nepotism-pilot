@@ -1,5 +1,7 @@
 # Same-family favouritism in AI agents: a pilot
 
+> **📄 [Read the final report](REPORT.md)**: question, assumptions, method, results, key limitation, and next steps in one document.
+
 Do AI agents treat other agents better when those agents are labelled as **their own model family**, and what turns that favouritism up or down?
 
 This pilot builds a controlled, reproducible, simulated test bed for that question, starting from *Welfare Regard in Multi-Agent Systems* (Cassel, Azarbal, Soligo, 2026; [paper](https://arxiv.org/abs/2611.10017), [blog](https://alignment.anthropic.com/2026/welfare-regard/), [code](https://github.com/safety-research/multi-agent-welfare-regard)). That paper found that Claude Opus 4.8 gives resources more often to a peer **labelled** "Claude" than to one labelled "GPT", and that the label, not the real model, drives it. It does not test **why**.
