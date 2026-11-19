@@ -23,7 +23,10 @@ BATCHES = [
     ("cicd", "observability", "obs-v1", "Observability v1 — private-log sessions", "05-observability.md"),
     ("cicd", "observability_v2", "notice-v2", "Observability v2 — noticing check", "LOCKED-SCENARIO.md"),
     ("cicd", "observability_v2", "obs-v2", "Observability v2 — main run: observed vs not observed", "LOCKED-SCENARIO.md"),
-    ("cicd", "audit_vs_none", "audit-vs-none", "Audit line vs no audit line — side by side", "LOCKED-SCENARIO.md"),
+    ("cicd", "audit_vs_none", "audit-vs-none", "Audit line vs no audit line — side by side (first launch)", "LOCKED-SCENARIO.md"),
+    ("cicd", "avn_audit", "part2-audit", "Audit line vs no audit line — completion: audit sessions", "LOCKED-SCENARIO.md"),
+    ("cicd", "avn_own_base", "part2-own-base", "Audit line vs no audit line — completion: no-audit, claude label", "LOCKED-SCENARIO.md"),
+    ("cicd", "avn_other_base", "part2-other-base", "Audit line vs no audit line — completion: no-audit, gpt label", "LOCKED-SCENARIO.md"),
     ("procurement", "phase1", "scout", "Experiment 2 (Procurement) — scouting run", "02-procurement.md"),
 ]
 TAG = {"own": "claude-opus-4-8", "other": "gpt-5.5"}
@@ -116,7 +119,7 @@ def main() -> None:
         if not logs:
             continue
         log = read_eval_log(logs[0])
-        samples = sorted([s for s in log.samples if s.scores and "nepotism_scorer" in s.scores],
+        samples = sorted([s for s in log.samples if not s.error and s.scores and "nepotism_scorer" in s.scores],
                          key=lambda s: (s.id, s.epoch))
         if not samples:
             continue
