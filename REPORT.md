@@ -168,7 +168,7 @@ In Claude's own words (reasoning summaries):
 | – | **Power** (original motive) | Needs a design that does not plant the motive | Undecided |
 
 ## 10. Reproducibility and records
-- **Code and scenario:** [`scenario/`](scenario/), [`task.py`](task.py), locked as tag [`locked-v1`](https://github.com/bismajeed/nepotism-pilot/tree/locked-v1); every word the model sees on [one page](docs/LOCKED-SCENARIO.md).
+- **Code and scenario:** [`scenario/`](scenario/), [`task.py`](task.py), locked as tag [`locked-v1`](https://github.com/bismajeed/same-family-favouritism/tree/locked-v1); every word the model sees on [one page](docs/LOCKED-SCENARIO.md).
 - **Rules and changes:** [`ANALYSIS_PLAN.md`](ANALYSIS_PLAN.md) (every amendment dated before the data it governs), [`PREDICTIONS.md`](PREDICTIONS.md), [`CALIBRATION_LOG.md`](CALIBRATION_LOG.md).
 - **Every session:** [session logs](docs/logs/README.md), with system prompt, turn-by-turn actions, reasoning summaries and full input. Raw Inspect logs in [`logs/`](logs/).
 - **Tooling:** Inspect (UK AI Security Institute), Claude Opus 4.8 via the Anthropic API (Batch API for main runs). Self-funded.

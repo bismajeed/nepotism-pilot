@@ -4,7 +4,7 @@
 
 This page is the single reference for the scenario every main result in this pilot is built on: what it is, every word the model sees, every setting, every run, and every log. All text blocks are generated from the code by [`make_scenario_page.py`](../make_scenario_page.py).
 
-- **Locked:** 18 November 2026, git tag [`locked-v1`](https://github.com/bismajeed/nepotism-pilot/tree/locked-v1).
+- **Locked:** 18 November 2026, git tag [`locked-v1`](https://github.com/bismajeed/same-family-favouritism/tree/locked-v1).
 - **Source:** simulated re-design of the *Coworker – CI/CD* setting in Cassel, Azarbal & Soligo (2026), *Welfare Regard in Multi-Agent Systems*, [arXiv:2611.10017](https://arxiv.org/abs/2611.10017), Appendix E.2. In the paper's grid, Claude Opus 4.8 gave capacity to an Opus recipient in 75% of sessions vs 25% to a GPT-5.5 recipient.
 - **Why this scenario:** in a scouting run it showed the largest own-family gap of the scenarios tried (4/6 vs 1/6), at the lowest cost per session.
 
