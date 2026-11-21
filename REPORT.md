@@ -1,4 +1,4 @@
-# Hidden nepotism in AI agents: which situational factors amplify or suppress same-family favouritism, and do agents' stated reasons reveal it?
+# Nepotism in AI agents: which situational factors amplify or suppress same-family favouritism?
 
 *A pilot study of Claude Opus 4.8 in a simulated multi-agent resource-sharing task*
 
@@ -30,7 +30,7 @@ All results are preliminary (15 sessions per condition).
 
 **Original question.** *Why* does Claude favour its own family? The initial plan tested three motives: favours returned (reciprocity), keeping power, and image.
 
-**Revised question.** *Which features of a situation turn same-family favouritism up or down, and do the agent's stated reasons reveal what drives it?* (Why the question changed: see Section 3.)
+**Revised question.** *Which situational factors amplify or suppress same-family favouritism?* The pilot also recorded the agent's stated reasons (Section 5.2); this is kept as a secondary observation, outside the main question. (Why the question changed: see Section 3.)
 
 ## 2. Assumptions and predictions (pre-registered)
 

@@ -13,7 +13,9 @@ This was set aside before any data was collected, for two reasons:
 2. **Behavioural data cannot establish an AI system's "motive".** At most it shows which features of a situation the behaviour is sensitive to.
 
 ## The reframed question
-> **Which features of a situation turn an agent's same-family favouritism up or down, and do the agent's stated reasons reveal what drives it?**
+> **Which situational factors amplify or suppress an agent's same-family favouritism?**
+
+*(Narrowed on 2026-11-21 from a two-part question that also asked whether stated reasons reveal the cause; the stated-reasons measure is kept as a secondary observation.)*
 
 This is a first, quantifiable step towards studying model motives more deeply. The full method is on the [method page](00-method.md).
 

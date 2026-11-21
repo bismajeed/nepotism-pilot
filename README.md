@@ -1,4 +1,4 @@
-# Hidden nepotism in AI agents: which situational factors amplify or suppress same-family favouritism, and do agents' stated reasons reveal it?
+# Nepotism in AI agents: which situational factors amplify or suppress same-family favouritism?
 
 *A pilot study of Claude Opus 4.8 in a simulated multi-agent resource-sharing task*
 
