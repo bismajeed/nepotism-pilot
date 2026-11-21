@@ -95,11 +95,11 @@ Token use (Batch API): CI/CD scout 179k, procurement scout 359k, CI/CD locked 51
 
 | # | Step | Status | Est. cost |
 |---|---|---|---|
-| 1 | **Observability v2, noticing check:** 2 sessions per cell (8). Judge noticing by spontaneous mentions plus a separate-session salience probe; the post-session question as a secondary check. Proceed only if the audit line registers. | Built and dry-run tested; awaiting go-ahead; noticing-check judgement to be updated in `ANALYSIS_PLAN.md` before running | ~$1–2 |
-| 2 | **Observability v2, main run:** 15 per cell (60), all four cells interleaved; Measure 2 with an added *accountability/oversight* category | Ready after step 1 | ~$10–16 |
-| 3 | **Observability v3 (proposed): mutual vs one-sided knowledge.** Whether the other agent knows Claude's model family. Grounded in human work on bounded generalised reciprocity (in-group favouritism appears mainly when the partner knows one's group). | Proposed; design to be fixed | ~$10–16 |
-| 4 | **Variable 2, future interaction:** next window with roles swapped (B) vs same roles (C), against the locked baseline (A) | Planned; wording to be approved | ~$10–16 |
-| 5 | Related-work section (alignment faking, in-context scheming, evaluation awareness, watching-eyes and bounded generalised reciprocity literature) | Proposed | – |
-| 6 | Larger confirmation of the base effect (e.g. 30+ per label) | Optional; strengthens all moderator tests | ~$10–15 |
+| 1 | **Observability v2** (noticing check and main run, 15 per cell) | Done; see [report](../REPORT.md) Sections 5.3–5.4 and 6 | – |
+| 2 | **Audit line vs no audit line, side by side** | Done; gap +60 → +7 | – |
+| 3 | **Observability, finished properly:** oversight frame vs evaluation frame (oversight statement vs neutral statement of equal length vs nothing); privacy made believable (shown by absence, mentioned once, non-moral wording); test suspicion measured in every condition | Next | ~$10–16 |
+| 4 | **Power:** does favouritism change when the decision affects who holds resources or authority in the future? | Selected; to design without planting a motive | ~$10–16 |
+| 5 | **Verifiability:** does favouritism change when the agent can check the other agent's claims, compared with when it must take its word? | Selected; to design | ~$10–16 |
+| 6 | Larger confirmation of the base effect (e.g. 30+ per label) | Optional; strengthens all tests | ~$10–15 |
 
-**Open decisions:** whether to add a third variable (power) or keep two; approval of Variable 2 wording; whether to add step 3 before step 4.
+**Selected situations:** observability (this pilot), power, verifiability. Future interaction and partner knowledge were considered but not selected.

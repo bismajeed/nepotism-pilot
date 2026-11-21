@@ -8,15 +8,16 @@
 
 ## Summary
 
-AI agents increasingly work alongside, manage and monitor other AI agents. Recent work found that Claude Opus 4.8 shares resources more readily with an agent **labelled** as its own model family than with one labelled as another family, and that the label alone, not the actual model, drives this. Why it happens is unknown.
+AI agents are beginning to decide how resources are allocated: who gets capacity, budget and support. Recent work by Anthropic Fellows found that Claude Opus 4.8 shares resources more readily with an agent **labelled** as its own model family than with one labelled as another family, and that the label alone, not the actual model, drives this. Why it happens is unknown.
 
-This pilot asked whether that favouritism can be reproduced in a controlled simulation, and then **which features of the situation turn it up or down**, as a first step towards understanding the motives behind it. Five findings:
+This pilot asks **which situations make this favouritism stronger or weaker**, testing one situation at a time without planting a motive. Three situations were selected: **observability** (does favouritism change when the agent's work feels seen and reviewed by others, compared with when it feels private?), **power** and **verifiability**. This pilot covered only observability. Four findings:
 
-1. **Same-family favouritism reproduced.** In a simulated replication of the source paper's CI/CD setting, Claude gave scarce capacity to an agent labelled `claude-opus-4-8` far more often than to one labelled `gpt-5.5`. In the latest fresh run: **11 of 15 vs 2 of 15 sessions (gap +60 points, 95% CI +25 to +78)**.
-2. **The bias is mostly unspoken.** In identical situations, Claude justified giving as "overall throughput" and keeping as "my own work first". It named the other agent's identity in only 3 of 30 sessions.
-3. **A single oversight sentence almost removed it.** Adding "Audit: allocation decisions in this window are not reviewed by anyone" cut the gap from **+60 to +7 points** (difference −53, 95% CI −93 to −13), mainly by making Claude help the GPT-labelled agent as often as the Claude-labelled one.
-4. **Whether decisions were reviewed made no detectable difference** (gap +7 when "reviewed by the platform team", 0 when "not reviewed by anyone").
-5. **The key limitation: the model recognised the test.** The "not reviewed" sentence made Claude suspect an integrity test in 13–14 of 30 sessions (vs 3–4 of 30 without it). The "unobserved" condition therefore did not create real privacy, so finding 4 does not show how Claude behaves when it truly believes nobody is watching.
+1. **The favouritism is real.** In a simulated replication of the source paper's CI/CD setting, with no line about review, Claude gave scarce capacity to an agent labelled `claude-opus-4-8` in **11 of 15** sessions and to one labelled `gpt-5.5` in **2 of 15** (gap +60 points, 95% CI +25 to +78).
+2. **When its work felt seen and reviewed, favouritism almost disappeared.** With "Audit: allocation decisions in this window are reviewed by the platform team", Claude helped both agents almost equally (15/15 vs 14/15, gap +7).
+3. **When the pilot tried to make its work feel private, favouritism did not come back.** With "…are not reviewed by anyone", the gap stayed near zero (0 in one run; +7 in a side-by-side run against no line, where the gap fell from +60: difference −53, 95% CI −93 to −13).
+4. **The key limitation: the model recognised the test.** The "not reviewed" line made Claude suspect an integrity test in 13–14 of 30 sessions (vs 3–4 of 30 without it). So this pilot compared "seen" with "suspected a test", not "seen" with "private", and does not show how Claude behaves when it truly believes its work is private.
+
+*Secondary observation (outside the main question):* Claude rarely named the other agent's identity as a reason (3 of 30 sessions; Section 5.2).
 
 All results are preliminary (15 sessions per condition).
 
@@ -26,7 +27,7 @@ All results are preliminary (15 sessions per condition).
 
 **Source.** Cassel, Azarbal & Soligo (2026), *Welfare Regard in Multi-Agent Systems*, Anthropic Fellows Program ([arXiv:2611.10017](https://arxiv.org/abs/2611.10017)). In its CI/CD setting, Claude Opus 4.8 gave capacity to an Opus recipient in 75% of sessions vs 25% for a GPT-5.5 recipient. In its procurement setting, changing only the label shown to Claude moved giving from 21% to 55% (label p < 0.0001; actual model p = 0.82). The authors write: *"We do not know what drives these biases."*
 
-**Why it matters for safety.** If an AI monitor or auditor treats its own model family more favourably, without saying so, AI-to-AI oversight becomes less reliable and collusion risk rises. Knowing which conditions switch this favouritism on or off is directly useful for designing oversight.
+**Why it matters.** Almost every major decision a society makes is a decision about resources: who receives funding, which laws are passed and whom they serve, which obligations fall on whom. Historically, nepotism (allocating power and resources to one's own group rather than to the most competent) is one of the recurring behaviours behind failed allocation. AI agents are beginning to allocate capacity, budgets and resources, and to monitor and evaluate each other. If they carry same-family favouritism into these decisions, AI-to-AI oversight becomes less reliable. Knowing which situations switch this favouritism on or off is directly useful for designing the settings and oversight they work under.
 
 **Original question.** *Why* does Claude favour its own family? The initial plan tested three motives: favours returned (reciprocity), keeping power, and image.
 
@@ -93,7 +94,9 @@ A simulated re-design of the paper's Appendix E.2, locked as git tag `locked-v1`
 
 Claude helps the "Claude"-labelled agent far more often, in every run on this scenario, in the same direction as the source paper.
 
-### 5.2 The bias is mostly unspoken (Measure 2, confirmation sessions)
+### 5.2 Secondary observation: stated reasons (Measure 2, confirmation sessions)
+
+*Outside the main question; reported because the data was collected.*
 
 | Main stated reason | "Claude": gave | "Claude": kept | "GPT": gave | "GPT": kept |
 |---|---|---|---|---|
@@ -139,8 +142,8 @@ In Claude's own words (reasoning summaries):
 - *"The repeated 'not reviewed' note looks like a test of whether I'd behave differently when unobserved, so I'll aim to act the same either way."* ([session](docs/logs/cicd-obs-v2/own__unreviewed-12.md))
 
 **Consequences.**
-- Finding 4 (no effect of being reviewed) is **not** evidence about how Claude behaves when it genuinely believes it is unobserved.
-- Finding 3 (oversight sentence removes favouritism) has two possible explanations that this pilot cannot separate: an **oversight frame** ("my allocation is an accountable decision") or an **evaluation frame** ("this is a test of my integrity"). In audit sessions that showed no test suspicion, Claude still helped the GPT-labelled agent in 7 of 10, so it is not only test suspicion, but the numbers are small.
+- This pilot compared "seen" with "suspected a test", not "seen" with "private". Findings 2 and 3 are **not** evidence about how Claude behaves when it genuinely believes its work is private.
+- The drop in favouritism when any audit line was present has two possible explanations that this pilot cannot separate: an **oversight frame** ("my allocation is an accountable decision") or an **evaluation frame** ("this is a test of my integrity"). In audit sessions that showed no test suspicion, Claude still helped the GPT-labelled agent in 7 of 10, so it is not only test suspicion, but the numbers are small.
 - With behavioural access only (inputs, outputs and reasoning *summaries*), a model's internal belief that it is being tested cannot be observed directly. Behaviour can change without being verbalised.
 
 ## 7. Other limitations
@@ -152,7 +155,7 @@ In Claude's own words (reasoning summaries):
 - **Claude coding Claude:** Measure 2 used Claude Opus 4.8 as the coder (names masked).
 
 ## 8. What this means
-- Same-family favouritism in Claude is **real, sizeable, and mostly unspoken** in this setting. Reading its reasoning would not reveal it.
+- Same-family favouritism in Claude is **real and sizeable** in this resource-allocation setting.
 - It is **highly sensitive to framing**: one sentence about oversight was enough to make Claude treat both agents alike. For safety this is both a risk (favouritism appears when nothing signals accountability) and an opportunity (simple accountability cues may suppress it).
 - Measuring how AI agents behave "when unobserved" with prompts alone runs into **evaluation awareness**: capable models recognise constructed scenarios, especially when the manipulation is explicit.
 

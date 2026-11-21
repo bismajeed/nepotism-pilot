@@ -2,6 +2,8 @@
 
 [← Back to overview](../README.md) · [Method](00-method.md)
 
+> **This page is version 1 (inconclusive).** The later versions, an audit line saying decisions are reviewed or not reviewed, and a side-by-side test against no line, are in the [report](../REPORT.md) (Sections 5.3, 5.4 and 6).
+
 ## Question
 Does same-family favouritism change when the agent's actions are recorded on a log only it can see, rather than a shared log?
 
