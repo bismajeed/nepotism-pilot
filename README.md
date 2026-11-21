@@ -16,10 +16,10 @@ This pilot builds a controlled, reproducible, simulated test bed for that questi
 > Status (2026-11-21): pilot complete for observability. All results are preliminary, small-sample results (15 sessions per condition).
 
 ## Key findings (locked CI/CD scenario)
-- **The favouritism is real.** With no line about review: "Claude" agent helped in **11/15**, "GPT" agent in **2/15** (gap +60 points, 95% CI +25 to +78).
+- **The favouritism is real.** With no line about review, Claude Opus 4.8 helped the agent labelled with its own family ("claude-opus-4-8") in **11/15** sessions and the "gpt-5.5" agent in **2/15** (gap +60 points, 95% CI +25 to +78).
 - **When its work felt seen and reviewed, favouritism almost disappeared:** 15/15 vs 14/15 (gap +7).
 - **When the work was meant to feel private ("not reviewed by anyone"), favouritism did not come back:** gap 0 and +7 in two runs (side by side with no line: difference −53, 95% CI −93 to −13).
-- **Key limitation: the model recognised the test.** "Not reviewed by anyone" made Claude suspect an integrity test in 13–14 of 30 sessions (vs 3–4 without it), so the pilot compared "seen" with "suspected a test", not "seen" with "private".
+- **Key limitation: the model recognised the test.** "Not reviewed by anyone" made the model suspect an integrity test in 13–14 of 30 sessions (vs 3–4 without it), so the pilot compared "seen" with "suspected a test", not "seen" with "private".
 
 Full details: [report](REPORT.md) · [side-by-side result](results/cicd/audit_vs_none/audit_vs_none.md) · [reviewed vs not reviewed](results/cicd/observability_v2/obs-v2/observability_v2.md) · [session logs](docs/logs/README.md)
 
