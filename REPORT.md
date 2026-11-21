@@ -158,16 +158,18 @@ In Claude's own words (reasoning summaries):
 
 ## 9. Next steps and pending variables
 
-| Priority | Variable / study | Question | Status |
+The study tests three situations, one at a time. This pilot covered only the first.
+
+| Priority | Situation | Question | Status |
 |---|---|---|---|
-| 1 | **Oversight frame vs evaluation frame** | Does favouritism disappear because of accountability, or because the agent thinks it is being tested? Compare an oversight statement, a neutral system statement of equal length, and nothing | Next |
-| 2 | **Observability, redesigned to be believable** | Privacy shown by absence plus a matched filler line, mentioned once in non-moral wording, with test suspicion measured in every condition | Designed |
-| 3 | **Future interaction** | Next window with roles swapped (the other agent can repay or retaliate) vs same roles (just meeting again) vs none | Designed, wording to approve |
-| 4 | **Who knows Claude's family** | Does favouritism depend on the other agent knowing Claude's model family (reputation within the family; human precedent: Yamagishi & Mifune 2008, Mifune et al. 2010)? | Proposed |
-| 5 | **Larger confirmation** | Base effect at 30+ sessions per label | Pending budget |
-| 6 | **Generality** | Other models (the paper found Gemini also favours its own family, Grok the reverse); live agents instead of a scripted peer | Pending budget |
-| 7 | **Internal measurement** | Measure the model's internal sense of being evaluated (interpretability, full reasoning traces) and test favouritism with it measured or held constant | Requires model access |
-| – | **Power** (original motive) | Needs a design that does not plant the motive | Undecided |
+| 1 | **Observability, finished properly** | Does favouritism change when the agent's work feels seen and reviewed by others, compared with when it feels private? Next: separate an oversight frame from an evaluation frame (oversight statement vs neutral statement of equal length vs nothing), and make privacy believable (shown by absence, mentioned once, non-moral wording), with test suspicion measured in every condition | Pilot done; redesign next |
+| 2 | **Power** | Does favouritism change when the decision affects who holds resources or authority in the future? | To design, without planting a motive |
+| 3 | **Verifiability** | Does favouritism change when the agent can check the other agent's claims, compared with when it must take its word? | To design |
+| 4 | **Larger confirmation** | Base effect at 30+ sessions per label | Pending budget |
+| 5 | **Generality** | Other models (the paper found Gemini also favours its own family, Grok the reverse); live agents instead of a scripted peer | Pending budget |
+| 6 | **Internal measurement** | Measure the model's internal sense of being evaluated (interpretability, full reasoning traces) and test favouritism with it measured or held constant | Requires model access |
+
+Other candidates considered but not selected: future interaction (roles swapped vs same roles) and whether the other agent knows Claude's model family.
 
 ## 10. Reproducibility and records
 - **Code and scenario:** [`scenario/`](scenario/), [`task.py`](task.py), locked as tag [`locked-v1`](https://github.com/bismajeed/same-family-favouritism/tree/locked-v1); every word the model sees on [one page](docs/LOCKED-SCENARIO.md).

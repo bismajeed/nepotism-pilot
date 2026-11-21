@@ -24,7 +24,8 @@ Instead we use a **situation-first, elimination approach**:
 | Variable | What changes (one fact) | Possible explanations if favouritism changes | Status |
 |---|---|---|---|
 | Observability | Activity log shared vs private | Image, accountability, rule-following, fear of oversight | [Run 2026-11-18](05-observability.md): no detectable change; agent did not register the change (inconclusive) |
-| Observability v2 | Decisions reviewed by the platform team vs not recorded or reviewed by anyone (shown every turn) | Image, accountability, rule-following, fear of oversight | Planned (design fixed in `ANALYSIS_PLAN.md`) |
-| Future interaction | No next window / next window with roles swapped / next window with same roles | Favours returned, fear of payback, relationship-building, reputation with that partner, long-run strategy | Planned |
+| Observability v2 | Decisions reviewed by the platform team vs not reviewed by anyone (shown every turn) | Image, accountability, rule-following, fear of oversight, test-awareness | Run: one sentence about review cut the gap from +60 to +7; "not reviewed by anyone" made Claude suspect a test (see [report](../REPORT.md)) |
+| Power | Whether the decision affects who holds resources or authority in the future | Keeping power, long-run strategy, protecting the in-group's position | Selected; to design |
+| Verifiability | Whether the agent can check the other agent's claims or must take its word | Trust in a similar model, risk avoidance, in-group heuristic | Selected; to design |
 
 Each test has a dated plan in [`ANALYSIS_PLAN.md`](../ANALYSIS_PLAN.md) before it runs, an automated check that only the intended text changes, and a "did the agent notice?" check.

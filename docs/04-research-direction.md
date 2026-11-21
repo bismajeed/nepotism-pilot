@@ -17,6 +17,8 @@ This was set aside before any data was collected, for two reasons:
 
 *(Narrowed on 2026-11-21 from a two-part question that also asked whether stated reasons reveal the cause; the stated-reasons measure is kept as a secondary observation.)*
 
+Three situations were selected, to be tested one at a time: **observability** (this pilot), **power** and **verifiability**.
+
 This is a first, quantifiable step towards studying model motives more deeply. The full method is on the [method page](00-method.md).
 
 ## Measures
