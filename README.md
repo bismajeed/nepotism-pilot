@@ -1,4 +1,4 @@
-# Nepotism in AI agents: which situational factors amplify or suppress same-family favouritism?
+# Nepotism in multi-agent AI systems: which situational factors amplify or suppress same-family favouritism in LLM agents' resource-sharing decisions?
 
 *A pilot study of Claude Opus 4.8 in a simulated multi-agent resource-sharing task*
 
